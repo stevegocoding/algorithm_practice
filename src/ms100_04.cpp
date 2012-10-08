@@ -3,9 +3,11 @@
 #include <vector>
 #include <iterator>
 #include <algorithm>
-#include <deque>
+#include <queue>
 
 #define SAFE_DELETE(p) if (p) {delete (p); (p) = NULL; }
+
+using namespace std; 
 
 struct bstree_node
 {
@@ -66,6 +68,55 @@ void destroy_bstree(bstree_node *& node_p)
 	SAFE_DELETE(node_p); 
 }
 
+void print_by_level(bstree_node *root)
+{
+	// Empty tree
+	if (!root)
+		return; 
+
+	queue<bstree_node*> que; 
+	que.push(root);
+	
+	while (!que.empty())
+	{
+		bstree_node *node_p = que.front();
+		cout << node_p->val << " " ; 
+		que.pop(); 
+		if (node_p->left)
+			que.push(node_p->left); 
+		if (node_p->right) 
+			que.push(node_p->right);	 
+	} 
+}
+
+void find_path(bstree_node *node_p, std::vector<int>& path, int sum, int expected_sum) 
+{
+	if (!node_p)
+		return; 
+
+	sum += node_p->val; 
+	path.push_back(node_p->val); 
+
+	bool is_leaf = (!node_p->left) && (!node_p->right);
+	if (sum == expected_sum && is_leaf) 
+	{
+		vector<int>::iterator it = path.begin(); 
+		for (; it != path.end(); ++it)
+			cout << *it << " "; 
+		cout << std::endl;
+
+		return; 
+	}
+
+	if (node_p->left)
+		find_path(node_p->left, path, sum, expected_sum); 
+	if (node_p->right) 
+		find_path(node_p->right, path, sum, expected_sum);
+	
+	sum -= node_p->val; 
+	path.pop_back();  
+}
+
 int main(int argc, char **argv)
 {
 	ifstream ifs("ms100_04.in");
@@ -76,7 +127,10 @@ int main(int argc, char **argv)
 	bstree_node *root = NULL; 
 
 	// Create the bst
-	create_bstree(root, data_vec);
+	create_bstree(root, data_vec); 
+
+	std::vector<int> path; 
+	find_path(root, path, 0, 41); 
 	
 	// Destroy the bst
 	destroy_bstree(root);
