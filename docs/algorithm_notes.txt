@@ -68,3 +68,9 @@ String:
 
 暴力搜索
 剪支
+
+TODO:
+KMP & BM 
+实现atoi
+写二分查找！
+实现strstr
