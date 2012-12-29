@@ -1,8 +1,14 @@
-add_executable(basis_algorithms 
-			basis_algorithms.cpp 
-			../data/basis_algorithms.in
-			)
-			
+include_directories(${PROJECT_SOURCE_DIR}/deps/include/)
+link_directories(${PROJECT_SOURCE_DIR}/deps/libs/)
+
+add_executable(basic_algorithms basis_algorithms.cpp ../data/basis_algorithms.in)
+target_link_libraries(basic_algorithms gtest)
+set_target_properties(basic_algorithms PROPERTIES DEBUG_POSTFIX "_d")
+install(TARGETS basic_algorithms RUNTIME DESTINATION bin/)
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/deps/bin/ DESTINATION bin/)
+
+
+
 add_executable(ms100_01 ms100_01.cpp ../data/ms100_01.in)
 add_executable(ms100_03 ms100_03.cpp ../data/ms100_03.in)
 add_executable(ms100_04 ms100_04.cpp ../data/ms100_04.in)

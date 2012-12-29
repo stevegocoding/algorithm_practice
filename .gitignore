@@ -1,1 +1,20 @@
-/build/
+
+build/
+
+
+# LaTeX temp files 
+*.aux
+*.log
+*.synctex
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.jpg
+*.png
+*.svg
+*.bbl
+*.blg
+*.doc
+*.asv
+*.bak

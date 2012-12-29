@@ -1,0 +1,125 @@
+% UTF-8 encoding
+% Compile with latex+dvipdfmx, pdflatex or xelatex
+% XeLaTeX is recommanded
+% Some Chinese fonts should be installed in your system (SimSun, SimHei, FangSong, KaiTi)
+\documentclass[UTF8]{report}
+\usepackage{ctex}
+\usepackage{ccaption}
+\usepackage{listings}
+\usepackage{amsmath}
+
+% Source Code Formatting
+\lstset{ %
+	language=C++,                	% choose the language of the code
+	basicstyle=\small\ttfamily,     % the size of the fonts that are used for the code
+	numbers=left,                   % where to put the line-numbers
+	numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+	stepnumber=1,                   % the step between two line-numbers. If it is 1 each line will be numbered
+	numbersep=5pt,                  % how far the line-numbers are from the code
+	backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+	showspaces=false,               % show spaces adding particular underscores
+	showstringspaces=false,         % underline spaces within strings
+	showtabs=false,                 % show tabs within strings adding particular underscores
+	frame=single,           		% adds a frame around the code
+	tabsize=2,          			% sets default tabsize to 2 spaces
+	captionpos=b,           		% sets the caption-position to bottom
+	breaklines=true,        		% sets automatic line breaking
+	breakatwhitespace=false,    	% sets if automatic breaks should only happen at whitespace
+	escapeinside={\%*}{*)}        % if you want to add a comment within your code
+}
+
+
+\author{Guangfu Shi}
+\title{算法总结}
+
+\begin{document}
+
+\chapter{排序算法}
+
+\section{Quick Sort}
+
+\subsection{性能}
+\subsubsection{时间复杂度}
+
+\begin{table}[ht]
+\begin{center}
+	
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabular}{ | l | l |}     	
+
+	\hline
+
+	Average & Worst \\
+	\cline{1-2}
+
+	\(O(n \cdot \log{n})\) 	& 		\(O(n^2)\)  \\
+
+	\hline
+
+	\end{tabular}
+\end{center}
+\label{tab:quicksort_time_complexity}
+\end{table}
+
+\textbf{Worst case}:  In the most unbalanced case, a single Quicksort call involves \(O(n)\) work plus two recursive calls on lists of size \(0\) and \(n-1\), so the recurrence relation is: 
+\begin{equation}
+\begin{split} 
+T(n)& = O(n) + T(0) + T(n-1) \\
+	& = O(n) + T(n-1) \\
+	& = O(n^2)
+\end{split}
+\end{equation}
+
+\textbf{Average}: In the most balanced case, a single quicksort call involves \(O(n)\) work plus two recursive calls on lists of size \(n/2\), so the recurrence relation is: 
+\begin{equation}
+\begin{split} 
+T(n)& = O(n) + 2T(\frac{n}{2}) \\
+	& = O(n \log{n}) 
+\end{split}
+\end{equation}
+
+
+\subsubsection{空间复杂度}
+@TODO
+
+\subsection{实现}
+
+\lstinputlisting[caption=算法导论中的实现]{quicksort_clsr.cpp} 
+
+
+\section{Merge Sort}
+
+
+\subsection{实现}
+
+
+
+
+\section{Heap Sort}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{搜索算法}
+
+
+\section{Binary Search}
+
+\subsection{实现}
+
+\lstinputlisting[caption=Iterative Implementation]{bsearch_ite.cpp} 
+\lstinputlisting[caption=Recursive Implementation]{bsearch_rec.cpp} 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{数组相关问题}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{链表相关问题}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{二叉树相关问题}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
