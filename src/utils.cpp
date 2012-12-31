@@ -1,18 +1,10 @@
-#include <iostream>
-#include <fstream> 
 #include <vector>
-#include <stack>
-#include <algorithm>
-#include <iterator>
 #include <stdlib.h>
 #include <time.h>
-#include "gtest/gtest.h"
+#include <assert.h>
+#include "utils.h"
 
 using namespace std;
-
-/**
-	找最小的四个数
- */
 
 //////////////////////////////////////////////////////////////////////////
 // Utilities 
@@ -23,7 +15,7 @@ void rands_init()
 	srand((unsigned int)time(NULL)); 
 }
 
-void gen_rand_int(std::vector<int>& rands, int min, int max, int num = -1)
+void gen_rand_int(std::vector<int>& rands, int min, int max, int num)
 {
 	assert(min < max); 
 
@@ -37,11 +29,3 @@ void gen_rand_int(std::vector<int>& rands, int min, int max, int num = -1)
 		rands.push_back(r); 
 	}
 } 
-
-
-int main(int argc, char **argv)
-{
-	
-	
-	return 0;
-}

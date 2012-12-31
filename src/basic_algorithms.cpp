@@ -34,12 +34,6 @@ void gen_rand_int(std::vector<int>& rands, int min, int max, int num = -1)
 	}
 }
 
-
-
-
-
-
-
 //////////////////////////////////////////////////////////////////////////
 // Sorting Algorithms
 //////////////////////////////////////////////////////////////////////////
@@ -173,6 +167,87 @@ void merge_sort(vector<int>& data, int low, int high, vector<int>& temp)
 // End of Merge Sort
 
 
+/// Heap Sort
+
+
+void sift_down(vector<int>& data, int start, int end)
+{
+	int root = start;
+	while (root * 2 + 1 <= end)
+	{
+		int child = root * 2 + 1; 
+		int s = root; 
+		if (data[s] < data[child])
+			s = child; 
+		if (child + 1 <= end && data[s] < data[child+1])
+			s = child + 1; 
+		if (s != root)
+		{
+			swap(data[root], data[s]); 
+			root = s; 
+		}
+		else
+			return; 
+	}
+}
+
+void heapify(vector<int>& data)
+{
+	int n = data.size(); 
+	int start = (n - 2) / 2;	// last parent node
+	while (start >= 0)
+	{
+		sift_down(data, start, n - 1); 
+		start--; 
+	}
+}
+
+void sift_up(vector<int>& data, int start, int end)
+{
+	int child = end;
+	int parent = -1; 
+	while (child > start)
+	{
+		parent = (child - 1) / 2; 
+		if (data[parent] < data[child])
+		{
+			swap(data[parent], data[child]); 
+			child = parent; 
+		}
+		else 
+			return; 
+	}
+}
+
+void heapify2(vector<int>& data)
+{
+	int n = data.size(); 
+	int end = 1;	// first left child 
+	while (end < n);
+	{
+		sift_up(data, 0, end);
+		end++; 
+	}
+}
+
+void heap_sort(vector<int>& data)
+{
+	heapify(data);
+	int n = data.size(); 
+	int end = n - 1; 
+	while (end >= 0) 
+	{
+		swap(data[end], data[0]);
+		end--; 
+		sift_down(data, 0, end); 
+	}
+}
+
+
+
+/// End of Heap Sort 
+
+
 //////////////////////////////////////////////////////////////////////////
 
 
@@ -261,21 +336,21 @@ TEST(BinarySearchTest, RecursiveImpl)
 
 //////////////////////////////////////////////////////////////////////////
 
-int main(int argc, char **argv)
-{
-	rands_init();
-
-	std::cout << "Running tests" << std::endl;
-
-	testing::InitGoogleTest(&argc, argv);
-	return RUN_ALL_TESTS(); 
-
-	/*
-	std::vector<int> rands; 
-	gen_rand_int(rands, 1, 10, 30); 
-	
-	ostream_iterator<int> os_it(cout, ", ");
-	std::copy(rands.begin(), rands.end(), os_it); 
-	*/
-	return 0; 
-} 
+//int main(int argc, char **argv)
+//{
+//	rands_init();
+//
+//	std::cout << "Running tests" << std::endl;
+//
+//	testing::InitGoogleTest(&argc, argv);
+//	return RUN_ALL_TESTS(); 
+//
+//	/*
+//	std::vector<int> rands; 
+//	gen_rand_int(rands, 1, 10, 30); 
+//	
+//	ostream_iterator<int> os_it(cout, ", ");
+//	std::copy(rands.begin(), rands.end(), os_it); 
+//	*/
+//	return 0; 
+//} 

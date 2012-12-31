@@ -93,10 +93,43 @@ T(n)& = O(n) + 2T(\frac{n}{2}) \\
 \subsection{实现}
 
 
-
-
 \section{Heap Sort}
 
+\subsection{性能}
+
+\subsubsection{时间复杂度}
+
+\begin{table}[ht]
+\begin{center}
+	
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabular}{ | l | l |}     	
+
+	\hline
+
+	Average & Worst \\
+	\cline{1-2}
+
+	\(O(n \cdot \log{n})\) 	& 		\(O(n \cdot \log{n})\)  \\
+
+	\hline
+
+	\end{tabular}
+\end{center}
+\label{tab:quicksort_time_complexity}
+\end{table}
+
+\subsection{实现}
+
+下面的代码是采用 "sift down" 来做heapify的实现。 heapify的过程是一个自底向上(bottom-up)过程：从最后一个父节点(start节点)开始，用"sift down"保持从这个节点开始后面的所有节点是个heap，然后向上移动这个(start)节点，也就是start减1, 直到0。
+
+\lstinputlisting[caption=Heap Sort]{heapsort.cpp} 
+
+下面的代码是采用 "sift up" 来做heapify的实现。 heapify2的过程是一个自顶向下(top-down)过程：从第一个子节点(start节点)开始，用"sift up"保持从这个节点开始前面的所有节点是个heap，然后向下移动这个(start)节点，也就是start加1, 直到count-1。
+
+\lstinputlisting[caption=Heap Sort]{heapsort2.cpp}
+
+"sift down"版本的heapify的时间复杂度是 \(O(n)\), 而"sift up"版本的heapify2的时间复杂度是 \(O(n\log{n})\)。 从直觉上说这个差别来自于 heapify2 是自顶向下，节点数增加深度递增，"sift up" 中swap的操作就增加。而第一个heapify是自底向上，深度递减，swap的操作也递减。
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{搜索算法}
