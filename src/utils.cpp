@@ -1,10 +1,56 @@
 #include <vector>
+#include <iostream>
 #include <stdlib.h>
 #include <time.h>
 #include <assert.h>
 #include "utils.h"
 
 using namespace std;
+
+////////////////////////////////////////////////////////////////////////// 
+// Data Structures
+//////////////////////////////////////////////////////////////////////////
+void add_bst_node(bst_node *&p, int val)
+{
+	if (!p)
+	{
+		p = new bst_node(val);
+		return;
+	}
+	else if (val < p->val)
+		add_bst_node(p->left, val);
+	else 
+		add_bst_node(p->right, val);
+}
+
+bst_node *create_bst(const vector<int>& a)
+{
+	if (a.empty())
+		return NULL;  
+	bst_node *root = new bst_node(a[0]); 
+	for (unsigned int i = 1; i < a.size(); ++i)
+		add_bst_node(root, a[i]); 
+
+	return root; 
+} 
+
+void inorder_print(bst_node *node)
+{
+	if (!node)
+		return; 
+	inorder_print(node->left); 
+	cout << node->val << " | ";
+	inorder_print(node->right); 
+}
+
+void postorder_array(bst_node *node, vector<int>& a)
+{
+	if (!node)
+		return; 
+	postorder_array(node->left, a);
+	postorder_array(node->right,a); 
+	a.push_back(node->val);
+}
 
 //////////////////////////////////////////////////////////////////////////
 // Utilities 

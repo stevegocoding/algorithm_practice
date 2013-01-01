@@ -158,10 +158,101 @@ TEST(kMinTest, positive)
 /**
  * 微软面试100题 9.
  * 输入一个整数序列，判断其是否是一个二叉查找树的后序遍历结果.
+ * 思路：
+	二叉查找树的后序序列最后一个元素肯定为根节点，其余分成两个子序列，分别左子树，右子树，递归实现
  */ 
 
+bool is_bst_postorder(vector<int>& data, int start, int end)
+{
+	if (data.empty() || start > end) 
+		return false; 
+	int root = data[end];
+	int i = start;
+	for (; i < end; ++i)
+	{
+		if (data[i] > root) 
+			break; 
+
+	}
+	int j = i;
+	for (; j < end; ++j) 
+	{
+		if (data[j] < root) 
+			return false; 
+	}
+	bool left = true;
+	if ((i-1) > start)
+		left = is_bst_postorder(data, start, i-1); 
+	bool right = true; 
+	if ((end-1) > i)
+		right = is_bst_postorder(data, i, end-1); 
+
+	return left && right;
+}
+
+// -----------------------------------------------
+// TESTS 
+
+TEST(createBSTTest, normalInput)
+{
+	std::vector<int> data; 
+	gen_rand_int(data, 10, 50, 10); 
+
+	// Print original data 
+	cout << "Input: " << endl;
+	ostream_iterator<int> os_it(cout, ", ");
+	std::copy(data.begin(), data.end(), os_it); 
+
+	cout << endl; 
+
+	bst_node *root = create_bst(data); 
+	
+	// Print BST inorder
+	inorder_print(root); 
+
+	cout << endl; 
+}
+
+TEST(isBSTPostOrder, bstInput)
+{
+	//int a[] = {19, 42, 42, 22, 49, 37, 45, 14, 21, 31};
+	//int a[] = {28, 13, 49, 31, 30, 41, 12, 34, 11, 31};
+	//std::vector<int> data(a, a+sizeof(a)/sizeof(int)); 
+	std::vector<int> data; 
+	gen_rand_int(data, 10, 50, 10); 
+
+	// Print original data 
+	cout << "Input: " << endl;
+	ostream_iterator<int> os_it(cout, ", ");
+	std::copy(data.begin(), data.end(), os_it); 
+
+	cout << endl; 
+
+	bst_node *root = create_bst(data); 
+
+	// BST postorder to array 
+	std::vector<int> bst_array;
+	postorder_array(root, bst_array); 
+	cout << "Post order array: " << endl; 
+	std::copy(bst_array.begin(), bst_array.end(), os_it); 
+
+	cout << endl;
+
+	// Verify 
+	bool res = is_bst_postorder(bst_array, 0, bst_array.size()-1); 
+
+	EXPECT_TRUE(res);
+
+	cout << endl; 
+}
 
 
+////////////////////////////////////////////////////////////////////////// 
+
+/**
+ * 微软面试100题 11
+ * 求二叉树节点的最大距离
+ */ 
 
 //////////////////////////////////////////////////////////////////////////
 
