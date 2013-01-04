@@ -29,6 +29,10 @@ void delete_bst(bst_node *node);
 void inorder_print(bst_node *node); 
 void postorder_array(bst_node *node, vector<int>& a);
 
+typedef bst_node tree_node; 
+tree_node *create_tree_bfs(const vector<int>& a); 
+void delete_tree(tree_node *node);
+
 //////////////////////////////////////////////////////////////////////////
 
 void rands_init();

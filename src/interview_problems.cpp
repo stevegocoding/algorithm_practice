@@ -12,6 +12,27 @@ using namespace std;
  * 二叉树找出和为输入值的所有路径 
  */ 
 
+TEST(createTreeBFSTest, randInput) 
+{
+	std::vector<int> data; 
+	gen_rand_int(data, 10, 50, 10); 
+
+	// Print original data 
+	cout << "Input: " << endl;
+	ostream_iterator<int> os_it(cout, ", ");
+	std::copy(data.begin(), data.end(), os_it); 
+
+	cout << endl; 
+
+	tree_node *root = create_tree_bfs(data); 
+
+	// Print BST inorder
+	inorder_print(root); 
+
+	delete_tree(root);
+
+	cout << endl; 
+}
 
 
 ////////////////////////////////////////////////////////////////////////// 

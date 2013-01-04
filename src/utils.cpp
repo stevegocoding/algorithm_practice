@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <assert.h>
+#include <deque>
 #include "utils.h"
 
 using namespace std;
@@ -50,7 +51,7 @@ void inorder_print(bst_node *node)
 	if (!node)
 		return; 
 	inorder_print(node->left); 
-	cout << node->val << " | ";
+	cout << node->val << ", ";
 	inorder_print(node->right); 
 }
 
@@ -63,6 +64,36 @@ void postorder_array(bst_node *node, vector<int>& a)
 	a.push_back(node->val);
 }
 
+tree_node *create_tree_bfs(const vector<int>& a)
+{
+	if (a.empty())
+		return NULL; 
+	
+	tree_node *root = new tree_node(a[0]);
+	deque<tree_node**> q; 
+	q.push_back(&root); 
+	unsigned int i = 0; 
+	while (i < a.size())
+	{
+		tree_node **t = q.front();
+		q.pop_front(); 
+		if (!(*t))
+			*t = new tree_node(a[i]);
+		i++; 
+		q.push_back(&(*t)->left);
+		q.push_back(&(*t)->right); 
+	}
+	return root;
+}
+
+void delete_tree(tree_node *node)
+{
+	if (!node)
+		return; 
+	delete_tree(node->left);
+	delete_tree(node->right);
+	SAFE_DELETE(node); 
+}
 //////////////////////////////////////////////////////////////////////////
 // Utilities 
 //////////////////////////////////////////////////////////////////////////
