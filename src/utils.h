@@ -25,6 +25,7 @@ struct bst_node
 };
 
 bst_node *create_bst(const vector<int>& a); 
+void delete_bst(bst_node *node);
 void inorder_print(bst_node *node); 
 void postorder_array(bst_node *node, vector<int>& a);
 

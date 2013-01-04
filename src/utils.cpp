@@ -7,6 +7,8 @@
 
 using namespace std;
 
+#define SAFE_DELETE(p) if ((p)) {delete (p); (p) = NULL; }
+
 ////////////////////////////////////////////////////////////////////////// 
 // Data Structures
 //////////////////////////////////////////////////////////////////////////
@@ -32,7 +34,16 @@ bst_node *create_bst(const vector<int>& a)
 		add_bst_node(root, a[i]); 
 
 	return root; 
-} 
+}
+
+void delete_bst(bst_node *node)
+{
+	if (!node)
+		return; 
+	delete_bst(node->left);
+	delete_bst(node->right);
+	SAFE_DELETE(node); 
+}
 
 void inorder_print(bst_node *node)
 {

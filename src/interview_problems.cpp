@@ -1,10 +1,20 @@
 #include <vector>
+#include <stack>
 #include <iostream>
 #include <iterator>
 #include "utils.h"
 #include "gtest/gtest.h"
 
 using namespace std;
+
+/**
+ * 微软面试100题 4
+ * 二叉树找出和为输入值的所有路径 
+ */ 
+
+
+
+////////////////////////////////////////////////////////////////////////// 
 
 /**
  * 微软面试100题 5.
@@ -210,6 +220,8 @@ TEST(createBSTTest, normalInput)
 	// Print BST inorder
 	inorder_print(root); 
 
+	delete_bst(root);
+	
 	cout << endl; 
 }
 
@@ -233,6 +245,8 @@ TEST(isBSTPostOrder, bstInput)
 	// BST postorder to array 
 	std::vector<int> bst_array;
 	postorder_array(root, bst_array); 
+	delete_bst(root); 
+	
 	cout << "Post order array: " << endl; 
 	std::copy(bst_array.begin(), bst_array.end(), os_it); 
 
@@ -254,6 +268,190 @@ TEST(isBSTPostOrder, bstInput)
  * 求二叉树节点的最大距离
  */ 
 
+// -----------------------------------------------
+// TESTS 
+
+//////////////////////////////////////////////////////////////////////////
+
+/**
+ * 微软面试100题 15 
+ * 输入一颗二元查找树，输出它的镜像
+ */ 
+
+
+//////////////////////////////////////////////////////////////////////////
+
+/**
+ * 微软面试100题 16
+ * 逐层遍历二叉树（广度优先搜索） 
+ */ 
+
+//////////////////////////////////////////////////////////////////////////
+
+
+/**
+ * 微软面试100题 21
+ * 从递增数列中找出所有和为输入值的组合 
+ */  
+
+////////////////////////////////////////////////////////////////////////// 
+
+/** 
+ * 微软面试100题 24 
+ * 反转链表，合并链表
+ */  
+
+//////////////////////////////////////////////////////////////////////////
+
+/** 
+ * 微软面试100题 43
+ * 二叉树preorder, inorder和postorder的非递归实现
+ */  
+
+void preorder_ite(bst_node *root)
+{
+	stack<bst_node*> s;
+	s.push(root); 
+	
+	while (!s.empty())
+	{
+		bst_node *node = s.top(); 
+		s.pop(); 
+		
+		cout << node->val << ", "; 
+		
+		if (node->right)
+			s.push(node->right);
+		if (node->left)
+			s.push(node->left); 
+	} 
+}
+
+void inorder_ite(bst_node *root)
+{ 
+	if (!root)
+		return;
+	stack<bst_node*> s; 
+	bst_node *cur = root;
+	while ( cur || !s.empty())
+	{
+		if (cur)
+		{
+			s.push(cur);
+			cur = cur->left; 
+		}
+		else 
+		{
+			cur = s.top();
+			s.pop(); 
+			cout << cur->val << ", ";
+			cur = cur->right; 
+		}
+	}
+}
+
+void postorder_ite(bst_node *root)
+{
+	if (!root)
+		return; 
+	stack<bst_node*> s;
+	s.push(root);
+	bst_node *prev = NULL; 
+	while (!s.empty())
+	{
+		bst_node *cur = s.top();
+		// If we are traversing down 
+		if (!prev || prev->left == cur || prev->right == cur)
+		{
+			if (cur->left)
+				s.push(cur->left); 
+			else if (cur->right)
+				s.push(cur->right);
+		}
+		// If we are traversing back up 
+		else if (cur->left == prev)
+		{
+			if (cur->right)
+				s.push(cur->right); 
+		} 
+		else 
+		{
+			cout << cur->val << ", "; 
+			s.pop(); 
+		}
+		prev = cur; 
+	}
+}
+
+// -----------------------------------------------
+// TESTS  
+TEST(PreOderIterative, bstInput)
+{
+	std::vector<int> data; 
+	gen_rand_int(data, 10, 50, 10); 
+
+	// Print original data 
+	cout << "Input: " << endl;
+	ostream_iterator<int> os_it(cout, ", ");
+	std::copy(data.begin(), data.end(), os_it); 
+
+	cout << endl; 
+
+	bst_node *root = create_bst(data); 
+
+	// Preorder iterative traversal  
+	cout << "Preorder traversal: " << endl; 
+	preorder_ite(root);  
+	delete_bst(root); 
+	
+	cout << endl;
+}
+
+TEST(InOrderIterative, bstInput)
+{
+	std::vector<int> data; 
+	gen_rand_int(data, 10, 50, 10); 
+
+	// Print original data 
+	cout << "Input: " << endl;
+	ostream_iterator<int> os_it(cout, ", ");
+	std::copy(data.begin(), data.end(), os_it); 
+
+	cout << endl; 
+
+	bst_node *root = create_bst(data); 
+
+	// Inorder iterative traversal  
+	cout << "Inorder traversal: " << endl; 
+	inorder_ite(root);   
+	delete_bst(root); 
+
+	cout << endl; 
+}
+
+TEST(PostOrderIterative, bstInput)
+{
+	std::vector<int> data; 
+	gen_rand_int(data, 10, 50, 10); 
+
+	// Print original data 
+	cout << "Input: " << endl;
+	ostream_iterator<int> os_it(cout, ", ");
+	std::copy(data.begin(), data.end(), os_it); 
+
+	cout << endl; 
+
+	bst_node *root = create_bst(data); 
+
+	// Inorder iterative traversal  
+	cout << "Postorder traversal: " << endl; 
+	postorder_ite(root);   
+	delete_bst(root); 
+
+	cout << endl; 
+}
+
+ 
 //////////////////////////////////////////////////////////////////////////
 
 int main(int argc, char **argv)
