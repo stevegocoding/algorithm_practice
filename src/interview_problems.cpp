@@ -380,9 +380,7 @@ void delete_tree2(tree_node2 *node)
 	delete_tree2(node->left);
 	delete_tree2(node->right);
 	SAFE_DELETE(node); 
-}
-
-
+} 
 
 // -----------------------------------------------
 // TESTS 
@@ -413,13 +411,34 @@ void mirror_bst(bst_node *root)
  * 逐层遍历二叉树（广度优先搜索） 
  */ 
 
+void traverse_bfs(tree_node *root)
+{
+	if (!root)
+		return;
+	deque<tree_node*> q; 
+	q.push_back(root);
+	while (!q.empty())
+	{
+		tree_node *p = q.front();
+		q.pop_front(); 
+		cout << p->val << ", ";  
+		if (p->left)
+			q.push_back(p->left);
+		if (p->right)
+			q.push_back(p->right);
+	}
+}
+
+// -----------------------------------------------
+// TESTS 
+
 //////////////////////////////////////////////////////////////////////////
 
 
 /**
  * 微软面试100题 21
- * 从递增数列中找出所有和为输入值的组合 
- */  
+ * 输入两个数m, n, 从数列1, 2, 3, 4, 5 ... n 取几个数，使其和等于m，列出所有可能
+ */ 
 
 ////////////////////////////////////////////////////////////////////////// 
 
@@ -427,8 +446,6 @@ void mirror_bst(bst_node *root)
  * 微软面试100题 24 
  * 反转链表，合并链表
  */  
-
-
 
 //////////////////////////////////////////////////////////////////////////
 
