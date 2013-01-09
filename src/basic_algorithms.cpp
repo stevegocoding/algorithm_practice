@@ -8,31 +8,7 @@
 #include <time.h>
 #include "gtest/gtest.h"
 
-using namespace std;
-
-//////////////////////////////////////////////////////////////////////////
-// Utilities 
-//////////////////////////////////////////////////////////////////////////
-
-void rands_init()
-{
-	srand((unsigned int)time(NULL)); 
-}
-
-void gen_rand_int(std::vector<int>& rands, int min, int max, int num = -1)
-{
-	assert(min < max); 
-
-	rands.clear();
-
-	int n = (num == -1)? max - min + 1 : num;
-
-	for (int i = 0; i < n; ++i)
-	{
-		int r = min + (rand() % (int)(max - min + 1));
-		rands.push_back(r); 
-	}
-}
+using namespace std; 
 
 //////////////////////////////////////////////////////////////////////////
 // Sorting Algorithms
@@ -45,7 +21,7 @@ int partition(vector<int>& data, int start, int end)
 		start < 0 || end >= (int)data.size())
 		cerr << "Invalid Parameters" << endl; 
 
-	int pivot_idx = data.size() / 2; 
+	int pivot_idx = (int)data.size() / 2; 
 	swap(data[pivot_idx], data[end]);
 	
 	int small = start - 1;  
@@ -78,7 +54,7 @@ void quick_sort(vector<int>& data, int start, int end)
 void quick_sort_ite(vector<int>& data)
 {
 	int start = 0; 
-	int end = data.size() - 1;
+	int end = (int)data.size() - 1;
 	int idx; 
 	stack<int> s; 
 
@@ -170,7 +146,7 @@ void merge_sort(vector<int>& data, int low, int high, vector<int>& temp)
 /// Heap Sort
 
 
-void sift_down(vector<int>& data, int start, int end)
+void shift_down(vector<int>& data, int start, int end)
 {
 	int root = start;
 	while (root * 2 + 1 <= end)
@@ -193,16 +169,16 @@ void sift_down(vector<int>& data, int start, int end)
 
 void heapify(vector<int>& data)
 {
-	int n = data.size(); 
+	int n = (int)data.size(); 
 	int start = (n - 2) / 2;	// last parent node
 	while (start >= 0)
 	{
-		sift_down(data, start, n - 1); 
+		shift_down(data, start, n - 1); 
 		start--; 
 	}
 }
 
-void sift_up(vector<int>& data, int start, int end)
+void shift_up(vector<int>& data, int start, int end)
 {
 	int child = end;
 	int parent = -1; 
@@ -221,11 +197,11 @@ void sift_up(vector<int>& data, int start, int end)
 
 void heapify2(vector<int>& data)
 {
-	int n = data.size(); 
+	int n = (int)data.size(); 
 	int end = 1;	// first left child 
 	while (end < n);
 	{
-		sift_up(data, 0, end);
+		shift_up(data, 0, end);
 		end++; 
 	}
 }
@@ -233,21 +209,17 @@ void heapify2(vector<int>& data)
 void heap_sort(vector<int>& data)
 {
 	heapify(data);
-	int n = data.size(); 
+	int n = (int)data.size(); 
 	int end = n - 1; 
 	while (end >= 0) 
 	{
 		swap(data[end], data[0]);
 		end--; 
-		sift_down(data, 0, end); 
+		shift_down(data, 0, end); 
 	}
 }
 
-
-
 /// End of Heap Sort 
-
-
 //////////////////////////////////////////////////////////////////////////
 
 
@@ -257,7 +229,7 @@ void heap_sort(vector<int>& data)
 
 int binary_search(const vector<int>& data, int key)
 {
-	int n = data.size();
+	int n = (int)data.size();
 	int left = 0; 
 	int right = n - 1;
 	
@@ -328,29 +300,7 @@ TEST(BinarySearchTest, RecursiveImpl)
 { 
 	int a[] = {5, 6, 7, 8, 9, 10}; 
 	vector<int> data(a, a + sizeof(a)/sizeof(int)); 
-	int pos = binary_search_rec(data, 8, 0, data.size()-1);
+	int pos = binary_search_rec(data, 8, 0, (int)data.size()-1);
 
 	EXPECT_EQ(pos, 3); 
-}
-
-
-//////////////////////////////////////////////////////////////////////////
-
-//int main(int argc, char **argv)
-//{
-//	rands_init();
-//
-//	std::cout << "Running tests" << std::endl;
-//
-//	testing::InitGoogleTest(&argc, argv);
-//	return RUN_ALL_TESTS(); 
-//
-//	/*
-//	std::vector<int> rands; 
-//	gen_rand_int(rands, 1, 10, 30); 
-//	
-//	ostream_iterator<int> os_it(cout, ", ");
-//	std::copy(rands.begin(), rands.end(), os_it); 
-//	*/
-//	return 0; 
-//} 
+} 

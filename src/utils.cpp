@@ -8,8 +8,6 @@
 
 using namespace std;
 
-#define SAFE_DELETE(p) if ((p)) {delete (p); (p) = NULL; }
-
 ////////////////////////////////////////////////////////////////////////// 
 // Data Structures
 //////////////////////////////////////////////////////////////////////////
@@ -20,7 +18,7 @@ void add_bst_node(bst_node *&p, int val)
 		p = new bst_node(val);
 		return;
 	}
-	else if (val < p->val)
+	else if (val < p->val)\
 		add_bst_node(p->left, val);
 	else 
 		add_bst_node(p->right, val);
@@ -62,6 +60,17 @@ void postorder_array(bst_node *node, vector<int>& a)
 	postorder_array(node->left, a);
 	postorder_array(node->right,a); 
 	a.push_back(node->val);
+}
+
+tree_node *create_tree(const vector<int>& a)
+{
+	if (a.empty())
+		return NULL;  
+	tree_node *root = new tree_node(a[0]); 
+	for (unsigned int i = 1; i < a.size(); ++i)
+		add_bst_node(root, a[i]); 
+
+	return root; 
 }
 
 tree_node *create_tree_bfs(const vector<int>& a)

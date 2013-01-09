@@ -2,7 +2,7 @@ include_directories(${PROJECT_SOURCE_DIR}/deps/include/)
 link_directories(${PROJECT_SOURCE_DIR}/deps/libs/)
 
 add_executable(interview_problems 
-	# basic_algorithms.cpp 
+	basic_algorithms.cpp 
 	interview_problems.cpp
 	utils.cpp
 	utils.h) 

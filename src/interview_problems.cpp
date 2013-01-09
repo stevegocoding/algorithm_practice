@@ -12,6 +12,15 @@ using namespace std;
  * 二叉树找出和为输入值的所有路径 
  */ 
 
+void find_path_sum(tree_node *node, int& cur_sum, int expected_sum, vector<int>& path)
+{
+	if (!node)
+		return; 
+	
+	cur_sum += node->val; 
+	
+}
+
 TEST(createTreeBFSTest, randInput) 
 {
 	std::vector<int> data; 
@@ -53,7 +62,7 @@ bool is_min_heap(const vector<int>& data, int i)
 {
 	int left = 2 * i + 1; 
 	int right = left + 1;
-	int n = data.size(); 
+	int n = (int)data.size(); 
 	if (i >=n || left >= n)
 		return true; 
 	else 
@@ -89,7 +98,7 @@ void sift_down(vector<int>& data, int start, int end)
 
 void min_heapify(vector<int>& data)
 {
-	int n = data.size(); 
+	int n = (int)data.size(); 
 	int start = (n - 2) / 2;
 	while (start >= 0)
 	{
@@ -113,7 +122,7 @@ int get_min(vector<int>& data, int count, int k)
 
 void k_min(vector<int>& data, int k, vector<int>& out)
 {
-	int n = data.size(); 
+	int n = (int)data.size(); 
 	min_heapify(data);		// build a min heap 
 	while (k > 0)
 	{
@@ -274,13 +283,12 @@ TEST(isBSTPostOrder, bstInput)
 	cout << endl;
 
 	// Verify 
-	bool res = is_bst_postorder(bst_array, 0, bst_array.size()-1); 
+	bool res = is_bst_postorder(bst_array, 0, (int)bst_array.size()-1); 
 
 	EXPECT_TRUE(res);
 
 	cout << endl; 
 }
-
 
 ////////////////////////////////////////////////////////////////////////// 
 
@@ -288,6 +296,93 @@ TEST(isBSTPostOrder, bstInput)
  * 微软面试100题 11
  * 求二叉树节点的最大距离
  */ 
+struct tree_node2 
+{
+	tree_node2(int _val)
+		: val(_val)
+		, left(NULL) 
+		, right(NULL)
+		, max_len_left(0)
+		, max_len_right(0)
+	{}
+	tree_node2 *left; 
+	tree_node2 *right; 
+	int max_len_left; 
+	int max_len_right;
+	int val; 
+};
+
+int max_len = 0; 
+void find_max_len(tree_node2 *root)
+{
+	if (!root)
+		return; 
+	if (root->left == NULL)
+		root->left->max_len_left = 0; 
+	if (root->right == NULL)
+		root->right->max_len_right = 0; 
+	if (root->left)
+		find_max_len(root->left); 
+	if (root->right)
+		find_max_len(root->right);
+	if (root->left)
+	{
+		int temp = 0; 
+		if (root->left->max_len_left > root->left->max_len_right) 
+			temp = root->left->max_len_left;
+		else 
+			temp = root->left->max_len_right;
+		root->max_len_left = temp + 1; 
+	}
+	if (root->right)
+	{
+		int temp = 0; 
+		if (root->right->max_len_left > root->right->max_len_right)
+			temp = root->right->max_len_left; 
+		else 
+			temp = root->right->max_len_right; 
+		root->max_len_right = temp + 1;
+	}
+	
+	// Update the global max length
+	if (root->max_len_left + root->max_len_right > max_len) 
+		max_len = root->max_len_left + root->max_len_right; 
+}
+
+void add_tree_node2(tree_node2 *&p, int val)
+{
+	if (!p)
+	{
+		p = new tree_node2(val);
+		return;
+	}
+	else if (val < p->val)
+		add_tree_node2(p->left, val);
+	else 
+		add_tree_node2(p->right, val);
+}
+
+tree_node2 *create_tree2(const vector<int>& a)
+{
+	if (a.empty())
+		return NULL;  
+	tree_node2 *root = new tree_node2(a[0]); 
+	for (unsigned int i = 1; i < a.size(); ++i)
+		add_tree_node2(root, a[i]); 
+
+	return root; 
+}
+
+void delete_tree2(tree_node2 *node)
+{
+	if (!node)
+		return; 
+	delete_tree2(node->left);
+	delete_tree2(node->right);
+	SAFE_DELETE(node); 
+}
+
+
 
 // -----------------------------------------------
 // TESTS 
@@ -298,6 +393,17 @@ TEST(isBSTPostOrder, bstInput)
  * 微软面试100题 15 
  * 输入一颗二元查找树，输出它的镜像
  */ 
+
+void mirror_bst(bst_node *root)
+{
+	if (!root)
+		return;  
+	swap(root-left, root->right);
+	if (root->left)
+		mirror_bst(root->left); 
+	if (root->right)
+		mirror_bst(root->right);
+}
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -321,6 +427,8 @@ TEST(isBSTPostOrder, bstInput)
  * 微软面试100题 24 
  * 反转链表，合并链表
  */  
+
+
 
 //////////////////////////////////////////////////////////////////////////
 
