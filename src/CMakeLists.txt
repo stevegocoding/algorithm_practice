@@ -4,6 +4,7 @@ link_directories(${PROJECT_SOURCE_DIR}/deps/libs/)
 add_executable(interview_problems 
 	basic_algorithms.cpp 
 	interview_problems.cpp
+	cracking_problems.cpp
 	utils.cpp
 	utils.h) 
 

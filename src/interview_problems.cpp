@@ -396,7 +396,7 @@ void mirror_bst(bst_node *root)
 {
 	if (!root)
 		return;  
-	swap(root-left, root->right);
+	swap(root->left, root->right);
 	if (root->left)
 		mirror_bst(root->left); 
 	if (root->right)

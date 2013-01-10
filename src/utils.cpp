@@ -1,9 +1,9 @@
-#include <vector>
-#include <iostream>
+#include <fstream>
 #include <stdlib.h>
 #include <time.h>
 #include <assert.h>
 #include <deque>
+#include <iomanip> 
 #include "utils.h"
 
 using namespace std;
@@ -103,6 +103,65 @@ void delete_tree(tree_node *node)
 	delete_tree(node->right);
 	SAFE_DELETE(node); 
 }
+
+//////////////////////////////////////////////////////////////////////////
+// Matrix 
+//////////////////////////////////////////////////////////////////////////
+
+int **alloc_matrix(int n)
+{
+	int **mat = new int*[n];
+	for (int i = 0; i < n; ++i) 
+	{
+		mat[i] = new int[n]; 
+		std::fill(mat[i], mat[i]+n, 0); 
+	}
+	return mat; 
+}
+
+void free_matrix(int **mat, int n)
+{
+	if (!mat)
+		return;
+	for (int i = 0; i < n; ++i)
+	{
+		SAFE_DELETE_ARRAY(mat[i]); 
+	}
+	SAFE_DELETE_ARRAY(mat);
+}
+
+void fill_matrix(int **mat, int n, const std::vector<int>& data)
+{
+	assert(mat);
+	assert(data.size() >= n*n);
+	int c = 0; 
+	for (int i = 0; i < n; ++i)
+	{
+		for (int j = 0; j < n; ++j)
+		{
+			mat[i][j] = data[c++]; 
+		}
+	}
+}
+
+void print_matrix(int **mat, int n, std::ostream& os, int prec, int width)
+{
+	std::ios::fmtflags old_flags = os.flags(); 
+	os.setf(ios::left, ios::adjustfield); 
+	
+	for (int i = 0; i < n; ++i)
+	{
+		for (int j = 0; j < n; ++j)
+		{
+			os << std::setprecision(prec) << std::setw(width) << std::setfill(' ') 
+				<< mat[i][j];  
+		}
+		os << std::endl;
+	}
+	
+	os.setf(old_flags);  
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Utilities 
 //////////////////////////////////////////////////////////////////////////

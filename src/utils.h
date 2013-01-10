@@ -1,11 +1,13 @@
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
+#include <iostream> 
 #include <vector>
 
 using namespace std;
 
 #define SAFE_DELETE(p) if ((p)) {delete (p); (p) = NULL; }
+#define SAFE_DELETE_ARRAY(p) if ((p)) {delete[] (p); (p) = NULL; }
 
 //////////////////////////////////////////////////////////////////////////
 // Data Structures 
@@ -36,6 +38,14 @@ tree_node *create_tree_bfs(const vector<int>& a);
 void delete_tree(tree_node *node);
 
 //////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////
+// Matrix 
+//////////////////////////////////////////////////////////////////////////
+int **alloc_matrix(int n); 
+void free_matrix(int **mat, int n); 
+void fill_matrix(int **mat, int n, const std::vector<int>& data); 
+void print_matrix(int **mat, int n, std::ostream& os = std::cout,  int prec = 4, int width = 8); 
 
 void rands_init();
 void gen_rand_int(std::vector<int>& rands, int min, int max, int num = -1); 
