@@ -3,6 +3,8 @@
 
 #include <iostream> 
 #include <vector>
+#include <string>
+#include <sstream>
 
 using namespace std;
 
@@ -49,5 +51,24 @@ void print_matrix(int **mat, int n, std::ostream& os = std::cout,  int prec = 4,
 
 void rands_init();
 void gen_rand_int(std::vector<int>& rands, int min, int max, int num = -1); 
+
+template <class T>
+class c_leetcode_solution
+{
+	
+public:
+	static void run_test()
+	{
+		T *instance = new T();
+		
+		instance->test();
+
+		delete instance; 
+	}
+
+	virtual void test()
+	{
+	}
+};
 
 #endif

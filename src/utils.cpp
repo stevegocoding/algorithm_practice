@@ -18,7 +18,7 @@ void add_bst_node(bst_node *&p, int val)
 		p = new bst_node(val);
 		return;
 	}
-	else if (val < p->val)\
+	else if (val < p->val)
 		add_bst_node(p->left, val);
 	else 
 		add_bst_node(p->right, val);
@@ -133,7 +133,7 @@ void free_matrix(int **mat, int n)
 void fill_matrix(int **mat, int n, const std::vector<int>& data)
 {
 	assert(mat);
-	assert(data.size() >= n*n);
+	assert((int)data.size() >= n*n);
 	int c = 0; 
 	for (int i = 0; i < n; ++i)
 	{

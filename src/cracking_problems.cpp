@@ -11,8 +11,63 @@
 	purpose:	The solutions to questions in the book <<Cracking the Coding Interview>>. 
 *********************************************************************/
 
+/*
+ *	Question 1.2
+ */
+
+void reverse_str(char *str)
+{
+	if (!str)
+		return; 
+
+	char *start = str;
+	char *end = str; 
+	
+	while (*end)
+		++end; 
+	
+	--end;
+	
+	while (start < end)
+	{
+		char tmp = *start;
+		*start = *end;
+		*end = tmp;
+		++start;
+		--end;
+	}
+}
 
 
+/*
+ *	Question 1.5
+ */
+string compress_str(const char *str, int length)
+{
+	stringstream ss;
+	
+	int repeat_count = 0;
+	int i = 0;
+	int j = i+1;
+	while (j < length)
+	{
+		if (str[j] == str[i])
+		{
+			++repeat_count;
+			++j;
+		}
+		else 
+		{
+			ss << str[i] << repeat_count;
+			i = j;
+			++j;
+			repeat_count = 0;
+		}
+	}
+	string compressed_str = ss.str();
+	if (compressed_str.length() >= length)
+		return string(str);
+}
 
 
 /** 
