@@ -69,18 +69,83 @@ public:
 		string s = "aab"; 
 		vector<vector<string> > result = partition(s);
 		
-		for (int i = 0; i < result.size(); ++i)
+		for (int i = 0; i < (int)result.size(); ++i)
 		{
-			for (int j = 0; j <result[i].size(); ++j)
+			for (int j = 0; j < (int)result[i].size(); ++j)
 				std::cout << result[i][j] << std::endl; 
 		}
 	}
 	
 };
 
+
+
+class PalindromePartitioningII : public c_leetcode_solution<PalindromePartitioningII>
+{
+	/*
+	 *	dp[i] 表示以i个字符为结尾的字符串的最少切割数目 状态转移方程为：
+		dp[i] = dp[k]		(if str[k...i] is palindrome, 0 <= k < i)
+				dp[i-1] + 1 (if no k for str[k...i] is palindrome, 0 <= k < i)
+	 */
+
+public:
+
+	vector<int> dp;
+	
+	int minCut(string s)
+	{
+		dp.resize(s.length());
+		std::fill(dp.begin(), dp.end(), 0); 
+		
+		for (int i = 1; i < (int)s.length(); ++i)
+		{
+			if (is_palindrome(s, 0, i)) 
+			{
+				dp[i] = 0;
+			}
+			else
+			{
+				int min = -1;
+				for (int j = 1; j <= i; ++j)
+				{
+					if (is_palindrome(s, j, i))
+					{
+						if (min == -1 || (1+dp[j-1]) < min)
+							min = dp[j-1]+1; 
+					}
+				}
+				dp[i] = min; 
+			}
+		}
+
+		return dp[s.length()-1]; 
+	}
+
+	bool is_palindrome(const string& s, int start, int end)
+	{
+		while (start < end)
+		{
+			if (s[start++] != s[end--])
+				return false;
+		}
+		return true; 
+	}
+
+	void test()
+	{
+		string s = "leet"; 
+		
+		int result = minCut(s);
+		cout << result << endl; 
+	}
+	
+};
+
 int main(int argc, char **argv)
 {
-	c_leetcode_solution<PalindromePartitioning>::run_test();
+	// c_leetcode_solution<PalindromePartitioning>::run_test();
 	
+	c_leetcode_solution<PalindromePartitioningII>::run_test();
+
 	return 0;
 }
