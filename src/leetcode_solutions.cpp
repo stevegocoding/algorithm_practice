@@ -514,6 +514,157 @@ public:
 };
 
 
+//////////////////////////////////////////////////////////////////////////
+
+class ValidPalindrome : public c_leetcode_solution<ValidPalindrome>
+{
+	/*
+	 *	AC
+	 */
+public:
+	 bool isPalindrome(string s) 
+	 {
+		 if (s.empty())
+			 return true; 
+
+		 int start = 0; 
+		 int end = s.length()-1;
+
+		 while (!is_valid_char(s[start]) && start < (int)s.length())
+		 {
+			 ++start;
+		 }
+
+		 while (!is_valid_char(s[end]) && end < (int)s.length())
+		 {
+			 ++end; 
+		 }
+
+		 if (start == end)
+			 return true; 
+
+		 if (start > end)
+			 return false;
+
+		 while (start < end)
+		 {
+			 if (!is_valid_char(s[start]))
+			 {
+				 ++start; 
+				 continue;
+			 }
+			 if (!is_valid_char(s[end]))
+			 {
+				 --end;
+				 continue;
+			 }
+
+			 if (s[start] != s[end] && tolower(s[start]) != tolower(s[end]))
+				 return false;
+			 
+			 ++start;
+			 --end; 
+		 }
+
+		 return true; 
+	 }
+
+	 bool is_valid_char(char ch)
+	 {
+		 return (ch >= 'a' && ch <= 'z' ) || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9'); 
+	 }
+
+	 /*
+	 void process_str(string& s)
+	 {
+		 int p = 0;
+		 int last = 0;
+		 int len = s.length();
+		 
+		 while ()
+		 
+		 for (int i = 0; i < s.length(); ++i)
+		 {
+			 if ((s[i] >= 'a' && s[i] <= 'z' ) || (s[i] >= 'A' && s[i] <= 'Z'))
+				 
+			 
+		 }
+		 
+	 }
+	 */
+
+	 void test()
+	 {
+		 string s = "1a2"; 
+
+		 bool result = isPalindrome(s);
+		 cout << result << endl; 
+	 }
+
+};
+
+
+//////////////////////////////////////////////////////////////////////////
+
+
+class TreeMaxPathSum : c_leetcode_solution<TreeMaxPathSum>
+{
+	/*
+	 *	AC
+	 */
+	struct TreeNode 
+	{
+		int val;
+		TreeNode *left;
+		TreeNode *right;
+		TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+	};
+
+
+public:
+
+	int maxPathSum(TreeNode *root) 
+	{
+		int max_sum = -999999; 
+		int current_sum = 0;
+		
+		helper(root, current_sum, max_sum); 
+		
+		return max_sum; 
+	}
+
+	int helper(TreeNode *node, int& current_sum, int& max_sum)
+	{
+		if (node == NULL)
+		{ 
+			return 0; 
+		} 
+
+		int left_sum = helper(node->left, current_sum, max_sum);
+		int right_sum = helper(node->right, current_sum, max_sum);
+		
+		current_sum = std::max(node->val, std::max(node->val+left_sum, node->val+right_sum)); 
+		max_sum = std::max(max_sum, std::max(current_sum, node->val+left_sum+right_sum));
+		
+		return current_sum;
+	}
+
+	void test()
+	{
+		TreeNode root(1);
+		TreeNode left(2);
+		TreeNode right(3); 
+		root.left = &left; 
+		root.right = &right; 
+
+		int result = maxPathSum(&root);
+
+		cout << result << endl; 
+
+	}
+};
+
+
 int main(int argc, char **argv)
 {
 	// c_leetcode_solution<PalindromePartitioning>::run_test();
@@ -526,7 +677,11 @@ int main(int argc, char **argv)
 	
 	// c_leetcode_solution<LongestConsecutiveSeq>::run_test();
 
-	c_leetcode_solution<WordLadder>::run_test();
+	// c_leetcode_solution<WordLadder>::run_test();
+
+	// c_leetcode_solution<ValidPalindrome>::run_test(); 
+
+	c_leetcode_solution<TreeMaxPathSum>::run_test();
 
 	return 0;
 }
