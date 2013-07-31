@@ -2,9 +2,19 @@
 #define __UTILS_H__
 
 #include <iostream> 
+#include <fstream>
 #include <vector>
 #include <string>
 #include <sstream>
+#include <map>
+#include <unordered_set>
+#include <deque>
+#include <array>
+#include <iomanip>  
+#include <stdlib.h>
+#include <time.h>
+#include <assert.h>
+
 
 using namespace std;
 
