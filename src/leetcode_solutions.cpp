@@ -459,7 +459,7 @@ public:
 		min_length = dict.size() + 2; 
 		dfs(start, end, dict, 0);
 
-		if (min_length >= dict.size()+2)
+		if (min_length >= (int)dict.size()+2)
 			return 0; 
 
 		return min_length + 1; 
@@ -599,8 +599,7 @@ public:
 
 		 bool result = isPalindrome(s);
 		 cout << result << endl; 
-	 }
-
+	 } 
 };
 
 
@@ -648,7 +647,7 @@ public:
 		
 		return current_sum;
 	}
-
+	
 	void test()
 	{
 		TreeNode root(1);
@@ -662,6 +661,313 @@ public:
 		cout << result << endl; 
 
 	}
+};
+
+
+//////////////////////////////////////////////////////////////////////////
+
+class MaxProfit : public c_leetcode_solution<MaxProfit>
+{
+public:
+	
+	int maxProfit(vector<int> &prices) 
+	{
+		int min_day = 0;
+		int max_profit = 0; 
+
+		for (int i = 1; i < (int)prices.size(); ++i)
+		{
+			if (prices[i] < prices[min_day])
+				min_day = i; 
+
+			if (prices[i] - prices[min_day] > max_profit)
+				max_profit = prices[i] - prices[min_day]; 
+		}
+
+		return max_profit;
+	}
+
+	void test()
+	{
+		int array[] = {1, 2, 4}; 
+		vector<int> prices(array, array+sizeof(array)/sizeof(int));
+		
+		int max = maxProfit(prices); 
+		
+		cout << max << endl; 
+	}
+
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class MaxProfitII : public c_leetcode_solution<MaxProfitII>
+{
+public:
+	
+	int maxProfit(vector<int> &prices) 
+	{
+		int max_profit = 0; 
+
+		for (int i = 1; i < (int)prices.size(); ++i)
+		{
+			if (prices[i] - prices[i-1] > 0)
+				max_profit += prices[i] - prices[i-1]; 
+		}
+		
+		return max_profit; 
+	}
+
+	void test()
+	{
+		int array[] = {1, 2}; 
+		vector<int> prices(array, array+sizeof(array)/sizeof(int));
+
+		int max = maxProfit(prices); 
+
+		cout << max << endl; 
+	}
+
+};
+
+
+//////////////////////////////////////////////////////////////////////////
+
+class MaxProfitIII : public c_leetcode_solution<MaxProfitII>
+{
+public: 
+	
+	int maxProfit(vector<int> &prices)
+	{
+		int f[3] = {0};
+		int g[3] = {0};
+
+		int n = prices.size() - 1;
+		for (int i = 0; i < n; ++i) {
+			int diff = prices[i+1] - prices[i];
+			int m = min(i+1, 2);
+			for (int j = m; j >= 1; --j) {
+				f[j] = max(f[j], g[j-1]) + diff;
+				g[j] = max(g[j], f[j]);
+			}
+		}
+		return max(g[1], g[2]);
+	}
+	
+
+};
+
+
+////////////////////////////////////////////////////////////////////////// 
+
+class Triangle : c_leetcode_solution<Triangle>
+{
+	/*
+	 *	AC
+	 */
+public:
+	vector<vector<int> > dp;
+	
+	int minimumTotal(vector<vector<int> > &triangle) 
+	{
+		int num_rows = triangle.size();
+
+		dp.resize(num_rows);
+		
+		for (int i = 1; i <= num_rows; ++i)
+		{
+			dp[i-1] = vector<int>(i);
+			for (int j = 0; j < i; ++j)
+			{
+				dp[i-1][j] = 0; 
+			}
+		}
+
+		if (triangle.size() == 1)
+			return triangle[0][0];
+
+		dp[0][0] = triangle[0][0]; 
+		for (int row = 1; row < num_rows; ++row)
+		{
+			for (int i = 0; i <= row; ++i)
+			{
+				if (i == 0)
+					dp[row][i] = dp[row-1][i] + triangle[row][i];
+				else if (i == row)
+					dp[row][i] = dp[row-1][i-1] + triangle[row][i]; 
+				else
+					dp[row][i] = min(dp[row-1][i] + triangle[row][i], dp[row-1][i-1] + triangle[row][i]);
+			}
+		}
+
+		int min_sum = dp[num_rows-1][0]; 
+		for (int i = 0; i < num_rows; ++i)
+			min_sum = std::min(min_sum, dp[num_rows-1][i]); 
+
+		return min_sum; 
+	}
+
+	void test()
+	{
+		vector<vector<int> > triangle(2);
+		
+		int r1[] = {1}; 		
+		triangle[0] = vector<int>(r1, r1+sizeof(r1)/sizeof(int));
+
+		int r2[] = {2, 3};
+		triangle[1] = vector<int>(r2, r2+sizeof(r2)/sizeof(int));
+
+		/*
+		int r3[] = {6, 5, 7};
+		triangle[2] = vector<int>(r3, r3+sizeof(r3)/sizeof(int));
+
+		int r4[] = {4, 1, 8, 3};
+		triangle[3] = vector<int>(r4, r4+sizeof(r4)/sizeof(int));
+		*/
+
+		int ans = minimumTotal(triangle); 
+		
+		cout << ans << endl; 
+	}
+}; 
+
+//////////////////////////////////////////////////////////////////////////
+
+class PascalTriangle : public c_leetcode_solution<PascalTriangle>
+{
+public:
+	vector<vector<int> > generate(int numRows) 
+	{
+		
+	}
+	
+
+	void test()
+	{
+		
+	}
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class PascalTriangleII : public c_leetcode_solution<PascalTriangleII>
+{
+public:
+	
+	vector<int> getRow(int rowIndex) 
+	{
+		vector<int> res;
+		if(rowIndex < 0)
+			return res;
+		res.push_back(1);
+		if(rowIndex == 0)
+			return res;
+		res.push_back(1);
+		if(rowIndex == 1)
+			return res;
+		int tmp1 = 0;
+		int tmp2 = 0;
+		for(int i = 2; i <= rowIndex; i++)
+		{
+			tmp2 = 1;
+			for(int j = 1; j < i; j++)
+			{
+				tmp1 = tmp2;
+				tmp2 = res[j];
+				res[j] = tmp1+tmp2;
+			}
+			res.push_back(1);
+		}
+		return res; 
+	}
+
+	void test()
+	{
+		vector<int> row = getRow(3);
+	}
+};
+
+
+//////////////////////////////////////////////////////////////////////////
+
+class PopulatingNextRightPointers : c_leetcode_solution<PopulatingNextRightPointers>
+{
+	struct TreeLinkNode 
+	{
+		int val;
+		TreeLinkNode *left, *right, *next;
+		TreeLinkNode(int x) : val(x), left(NULL), right(NULL), next(NULL) {}
+	};
+	
+public: 
+
+	void connect(TreeLinkNode *root) 
+	{
+		if (!root)
+			return;
+		
+		TreeLinkNode *cur = root;
+		TreeLinkNode *head = root;
+		root->next = NULL; 
+		
+		while (cur)
+		{
+			TreeLinkNode *p_left = cur->left;
+			TreeLinkNode *p_right = cur->right; 
+
+			if (p_left)
+			{
+				p_left->next = p_right; 
+				if (cur->next)
+					p_right->next = cur->next->left; 
+				else 
+					p_right->next = NULL; 
+			}
+			
+			if (cur->next)
+				cur = cur->next; 
+			else
+			{
+				cur = head->left; 
+				head = cur; 
+			}
+		} 
+	} 
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class PopulatingNextRightPointersII : public c_leetcode_solution<PopulatingNextRightPointersII>
+{
+	struct TreeLinkNode 
+	{
+		int val;
+		TreeLinkNode *left, *right, *next;
+		TreeLinkNode(int x) : val(x), left(NULL), right(NULL), next(NULL) {}
+	};
+
+public: 
+
+	void connect(TreeLinkNode *root) 
+	{ 
+		while (n) {
+			TreeLinkNode * next = NULL; // the first node of next level
+			TreeLinkNode * prev = NULL; // previous node on the same level
+			for (; n; n=n->next) {
+				if (!next) next = n->left?n->left:n->right;
+
+				if (n->left) {
+					if (prev) prev->next = n->left;
+					prev = n->left;
+				}
+				if (n->right) {
+					if (prev) prev->next = n->right;
+					prev = n->right;
+				}
+			}
+			n = next; // turn to next level
+		}
+	} 
 };
 
 
@@ -681,7 +987,18 @@ int main(int argc, char **argv)
 
 	// c_leetcode_solution<ValidPalindrome>::run_test(); 
 
-	c_leetcode_solution<TreeMaxPathSum>::run_test();
+	// c_leetcode_solution<TreeMaxPathSum>::run_test();
+
+	// c_leetcode_solution<MaxProfit>::run_test(); 
+	
+	// c_leetcode_solution<MaxProfitII>::run_test(); 
+
+	// c_leetcode_solution<MaxProfitIII>::run_test(); 
+	
+	// c_leetcode_solution<Triangle>::run_test(); 
+
+
+	c_leetcode_solution<PascalTriangleII>::run_test(); 
 
 	return 0;
 }
