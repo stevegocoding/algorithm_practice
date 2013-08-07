@@ -4,7 +4,7 @@
 
 using namespace std;
 
-class PalindromePartitioning : public c_leetcode_solution<PalindromePartitioning>
+class PalindromePartitioning : public c_solution<PalindromePartitioning>
 {
 	/**
 	两个阶段：
@@ -81,7 +81,7 @@ public:
 
 
 
-class PalindromePartitioningII : public c_leetcode_solution<PalindromePartitioningII>
+class PalindromePartitioningII : public c_solution<PalindromePartitioningII>
 {
 	/*
 	 *	dp[i] 表示以i个字符为结尾的字符串的最少切割数目 状态转移方程为：
@@ -150,7 +150,7 @@ public:
 };
 
 
-class SurroundedRegions : public c_leetcode_solution<SurroundedRegions>
+class SurroundedRegions : public c_solution<SurroundedRegions>
 {
 	/*
 	 *	AC
@@ -311,7 +311,7 @@ struct TreeNode
 };
 
 
-class SumRootToLeaf : public c_leetcode_solution<SumRootToLeaf>
+class SumRootToLeaf : public c_solution<SumRootToLeaf>
 {
 	/*
 	 *	AC
@@ -385,7 +385,7 @@ public:
 
 //////////////////////////////////////////////////////////////////////////
 
-class LongestConsecutiveSeq : c_leetcode_solution<LongestConsecutiveSeq>
+class LongestConsecutiveSeq : c_solution<LongestConsecutiveSeq>
 {
 public:
 
@@ -439,7 +439,7 @@ public:
 
 //////////////////////////////////////////////////////////////////////////
 
-class WordLadder : public c_leetcode_solution<WordLadder>
+class WordLadder : public c_solution<WordLadder>
 {
 	/*
 	 *	TLE on large test
@@ -516,7 +516,7 @@ public:
 
 //////////////////////////////////////////////////////////////////////////
 
-class ValidPalindrome : public c_leetcode_solution<ValidPalindrome>
+class ValidPalindrome : public c_solution<ValidPalindrome>
 {
 	/*
 	 *	AC
@@ -606,7 +606,7 @@ public:
 //////////////////////////////////////////////////////////////////////////
 
 
-class TreeMaxPathSum : c_leetcode_solution<TreeMaxPathSum>
+class TreeMaxPathSum : c_solution<TreeMaxPathSum>
 {
 	/*
 	 *	AC
@@ -666,7 +666,7 @@ public:
 
 //////////////////////////////////////////////////////////////////////////
 
-class MaxProfit : public c_leetcode_solution<MaxProfit>
+class MaxProfit : public c_solution<MaxProfit>
 {
 public:
 	
@@ -701,7 +701,7 @@ public:
 
 //////////////////////////////////////////////////////////////////////////
 
-class MaxProfitII : public c_leetcode_solution<MaxProfitII>
+class MaxProfitII : public c_solution<MaxProfitII>
 {
 public:
 	
@@ -733,7 +733,7 @@ public:
 
 //////////////////////////////////////////////////////////////////////////
 
-class MaxProfitIII : public c_leetcode_solution<MaxProfitII>
+class MaxProfitIII : public c_solution<MaxProfitII>
 {
 public: 
 	
@@ -760,7 +760,7 @@ public:
 
 ////////////////////////////////////////////////////////////////////////// 
 
-class Triangle : c_leetcode_solution<Triangle>
+class Triangle : c_solution<Triangle>
 {
 	/*
 	 *	AC
@@ -833,24 +833,47 @@ public:
 
 //////////////////////////////////////////////////////////////////////////
 
-class PascalTriangle : public c_leetcode_solution<PascalTriangle>
+class PascalTriangle : public c_solution<PascalTriangle>
 {
 public:
 	vector<vector<int> > generate(int numRows) 
 	{
+		vector<vector<int> > rows;
 		
+		if (numRows <= 0)
+			return rows; 
+
+		rows.push_back(vector<int>(1,1));		// first row 
+
+		if (numRows < 2)
+			return rows; 
+
+		rows.push_back(vector<int>(2, 1));		// second row
+
+		for (int i = 2; i < numRows; ++i)
+		{
+			vector<int> row;
+			row.push_back(1);
+			for (int j = 1; j < i; ++j)
+			{
+				row.push_back(rows[i-1][j-1] + rows[i-1][j]);
+			}
+			row.push_back(1);
+			rows.push_back(row);
+		}
+
+		return rows; 
 	}
 	
-
 	void test()
 	{
-		
+		vector<vector<int> > triangles = generate(5);
 	}
 };
 
 //////////////////////////////////////////////////////////////////////////
 
-class PascalTriangleII : public c_leetcode_solution<PascalTriangleII>
+class PascalTriangleII : public c_solution<PascalTriangleII>
 {
 public:
 	
@@ -890,7 +913,7 @@ public:
 
 //////////////////////////////////////////////////////////////////////////
 
-class PopulatingNextRightPointers : c_leetcode_solution<PopulatingNextRightPointers>
+class PopulatingNextRightPointers : c_solution<PopulatingNextRightPointers>
 {
 	struct TreeLinkNode 
 	{
@@ -937,7 +960,7 @@ public:
 
 //////////////////////////////////////////////////////////////////////////
 
-class PopulatingNextRightPointersII : public c_leetcode_solution<PopulatingNextRightPointersII>
+class PopulatingNextRightPointersII : public c_solution<PopulatingNextRightPointersII>
 {
 	struct TreeLinkNode 
 	{
@@ -950,6 +973,7 @@ public:
 
 	void connect(TreeLinkNode *root) 
 	{ 
+		TreeLinkNode *n = root;
 		while (n) {
 			TreeLinkNode * next = NULL; // the first node of next level
 			TreeLinkNode * prev = NULL; // previous node on the same level
@@ -968,6 +992,296 @@ public:
 			n = next; // turn to next level
 		}
 	} 
+};
+
+
+//////////////////////////////////////////////////////////////////////////
+
+class FlattenBinaryTree : public c_solution<FlattenBinaryTree>
+{
+	struct TreeNode 
+	{
+		int val;
+		TreeNode *left;
+		TreeNode *right;
+		TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+	};
+public:
+	void flatten(TreeNode *root) 
+	{
+		// Recursive Approache. AC
+		/*
+		if (!root)
+			return; 
+		
+		helper(root); 
+		*/ 
+
+		// Iterative Approach. AC
+		
+		if (!root)
+		{
+			return;
+		}
+
+		TreeNode *node = root;
+		while (node)
+		{
+			if (node->left)
+			{
+				TreeNode *temp = node->right; 
+				node->right = node->left; 
+				node->left = NULL;
+
+				// Find the tail of the original left subtree
+				TreeNode *p = node;
+				while (p->right) p = p->right; 
+
+				p->right = temp; 
+			}
+
+			node = node->right;
+		}
+
+
+	}
+
+	void helper(TreeNode *node)
+	{
+		if (!node)
+		{
+			return; 
+		}
+		
+		helper(node->left); 
+		
+		if (node->right)
+		{
+			TreeNode *temp = node->right; 
+			node->right = node->left; 
+			node->left = NULL;
+			TreeNode *p = node;
+			while (p->right) p = p->right; 
+			p->right = temp; 
+		}
+		else 
+		{
+			node->right = node->left;
+			node->left = NULL;
+		}
+
+		helper(node->right);
+	}
+
+	void test()
+	{
+		TreeNode root(1);
+		TreeNode left(2);
+		TreeNode right(3); 
+		root.left = &left; 
+		root.right = NULL;
+		left.left = &right;
+
+		flatten(&root);
+
+	}
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class BalancedBinaryTree : public c_solution<BalancedBinaryTree>
+{
+	/*
+	 *	AC 
+	 */
+public:
+	bool isBalanced(TreeNode *root) 
+	{
+		if (!root)
+			return true; 
+		
+		int left_depth = -1;
+		int right_depth = -1; 
+		if (root->left)
+			left_depth = depth(root->left);
+		if (root->right)
+			right_depth = depth(root->right);
+		
+		if (abs(left_depth-right_depth) > 1)
+			return false;
+		else 
+			return isBalanced(root->left) && isBalanced(root->right);
+	}
+
+	int depth(TreeNode *root)
+	{
+		if (!root->left && !root->right)
+			return 0; 
+
+		int left_depth = -1;
+		int right_depth = -1;
+
+		if (root->left)
+			left_depth = 1 + depth(root->left);
+
+		if (root->right)
+			right_depth = 1 + depth(root->right);
+
+		return std::max(left_depth, right_depth);
+	}
+	
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class Permutations : public c_solution<Permutations>
+{
+public:
+	vector<vector<int> > permute(vector<int> &num) 
+	{
+		vector<vector<int> > results; 
+		results = permute_helper(num, num.size()-1); 
+		return results;
+	}
+
+	vector<vector<int> > permute_helper(vector<int>& num, int end)
+	{
+		vector<vector<int> > new_results; 
+		if (end == 0)
+		{
+			vector<int> vec; 
+			vec.push_back(num[end]);
+			new_results.push_back(vec);
+			return new_results; 
+		}
+
+		vector<vector<int> > results = permute_helper(num, end-1);
+
+		for (int i = 0; i < (int)results.size(); ++i)
+		{
+			for (int j = 0; j <= results[i].size(); ++j)
+			{
+				vector<int> ns = insert_at(results[i], num[end], j);
+				new_results.push_back(ns); 
+			}
+		}
+		return new_results; 
+	}
+
+	vector<int> insert_at(vector<int> vec, int val, int pos)
+	{
+		vec.insert(vec.begin()+pos, val); 
+		return vec; 
+	}
+
+	void test()
+	{
+		int array[] = {1, 2}; 
+		vector<int> nums(array, array+sizeof(array)/sizeof(int)); 
+
+		vector<vector<int> > results = permute(nums); 
+	}
+};
+
+////////////////////////////////////////////////////////////////////////// 
+
+class Combinations : public c_solution<Combinations>
+{
+public: 
+
+	vector<vector<int> > combine(int n, int k) 
+	{ 
+		vector<int> path;
+		vector<int> nums;
+		for (int i = 1; i <= n; ++i)
+			nums.push_back(i); 
+		
+		vector<vector<int> > results = combine_helper(nums, path, 0, k); 
+		return results;
+	}
+
+	vector<vector<int> > combine_helper(vector<int>& nums, vector<int>& path, int start, int k)
+	{
+		vector<vector<int> > results; 
+
+		if (path.size() == k)
+		{
+			results.push_back(path); 
+			return results; 
+		}
+
+		for (int i = start; i < nums.size(); ++i)
+		{
+			path.push_back(nums[i]); 
+
+			vector<vector<int> > r = combine_helper(nums, path, i+1, k); 
+			
+			for (int j = 0; j < r.size(); ++j)
+			{
+				results.push_back(r[j]);
+			}
+
+			path.pop_back();
+		}
+
+		return results; 
+	}
+
+	void test()
+	{
+		combine(4, 2);
+	}
+
+};
+
+
+//////////////////////////////////////////////////////////////////////////
+
+class Subsets : public c_solution<Subsets>
+{
+public:
+	vector<vector<int> > subsets(vector<int> &S)
+	{
+		sort(S.begin(), S.end());
+		vector<vector<int> > results;
+		vector<int> path; 
+		subsets_helper(S, 0, path, results); 
+		
+		return results;
+
+		/*
+
+		vector<vector<int> > v(1);
+		for(int i = 0; i < S.size(); ++i) {
+			int j = v.size();
+			while(j-- > 0) {
+				v.push_back(v[j]);
+				v.back().push_back(S[i]);
+			}
+		}
+		
+		return v;
+		*/
+	}
+
+	void subsets_helper(vector<int>& s, int pos, vector<int>& path, vector<vector<int> >& results)
+	{
+		results.push_back(path);
+		
+		for (int i = pos; i < s.size(); ++i)
+		{
+			path.push_back(s[pos]);
+			subsets_helper(s, i+1, path, results);
+			path.pop_back(); 
+		}
+	}
+	
+	void test()
+	{
+		int arry[] = {1, 2, 3};
+		vector<int> s(arry, arry+sizeof(arry)/sizeof(int));
+		vector<vector<int> > results = subsets(s);
+	}
 };
 
 
@@ -997,8 +1311,18 @@ int main(int argc, char **argv)
 	
 	// c_leetcode_solution<Triangle>::run_test(); 
 
+	//c_leetcode_solution<PascalTriangleII>::run_test(); 
 
-	c_leetcode_solution<PascalTriangleII>::run_test(); 
+	// c_solution<PascalTriangle>::run_test(); 
+
+	c_solution<FlattenBinaryTree>::run_test();
+
+
+	// c_solution<Permutations>::run_test(); 
+
+	// c_solution<Combinations>::run_test(); 
+
+	// c_solution<Subsets>::run_test(); 
 
 	return 0;
 }

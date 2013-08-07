@@ -58,12 +58,13 @@ int **alloc_matrix(int n);
 void free_matrix(int **mat, int n); 
 void fill_matrix(int **mat, int n, const std::vector<int>& data); 
 void print_matrix(int **mat, int n, std::ostream& os = std::cout,  int prec = 4, int width = 8); 
+void print_matrix(vector<vector<int> >& mat, std::ostream& os, int prec = 4, int width = 8); 
 
 void rands_init();
 void gen_rand_int(std::vector<int>& rands, int min, int max, int num = -1); 
 
 template <class T>
-class c_leetcode_solution
+class c_solution
 {
 	
 public:
@@ -80,5 +81,7 @@ public:
 	{
 	}
 };
+
+
 
 #endif

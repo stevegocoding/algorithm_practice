@@ -2,8 +2,7 @@
 #include <stack>
 #include <iostream>
 #include <iterator>
-#include "utils.h"
-#include "gtest/gtest.h"
+#include "utils.h" 
 
 using namespace std;
 
@@ -21,6 +20,7 @@ void find_path_sum(tree_node *node, int& cur_sum, int expected_sum, vector<int>&
 	
 }
 
+/*
 TEST(createTreeBFSTest, randInput) 
 {
 	std::vector<int> data; 
@@ -42,6 +42,8 @@ TEST(createTreeBFSTest, randInput)
 
 	cout << endl; 
 }
+
+*/
 
 
 ////////////////////////////////////////////////////////////////////////// 
@@ -135,6 +137,8 @@ void k_min(vector<int>& data, int k, vector<int>& out)
 
 // -----------------------------------------------
 // TESTS 
+
+/*
 TEST(isMinHeapTest, minHeap)
 {
 	int a[] = {10, 38, 20, 49, 76, 65, 49, 97}; 
@@ -191,7 +195,7 @@ TEST(kMinTest, positive)
 
 	cout << endl; 
 }
-
+*/
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -232,7 +236,7 @@ bool is_bst_postorder(vector<int>& data, int start, int end)
 
 // -----------------------------------------------
 // TESTS 
-
+/*
 TEST(createBSTTest, normalInput)
 {
 	std::vector<int> data; 
@@ -289,6 +293,7 @@ TEST(isBSTPostOrder, bstInput)
 
 	cout << endl; 
 }
+*/
 
 ////////////////////////////////////////////////////////////////////////// 
 
@@ -531,6 +536,8 @@ void postorder_ite(bst_node *root)
 
 // -----------------------------------------------
 // TESTS  
+
+/*
 TEST(PreOderIterative, bstInput)
 {
 	std::vector<int> data; 
@@ -596,9 +603,12 @@ TEST(PostOrderIterative, bstInput)
 
 	cout << endl; 
 }
+*/ 
 
  
 //////////////////////////////////////////////////////////////////////////
+
+/*
 
 int main(int argc, char **argv)
 {
@@ -611,3 +621,5 @@ int main(int argc, char **argv)
 	
 	return 0; 
 } 
+
+*/

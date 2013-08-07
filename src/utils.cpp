@@ -156,6 +156,24 @@ void print_matrix(int **mat, int n, std::ostream& os, int prec, int width)
 	os.setf(old_flags);  
 }
 
+void print_matrix(vector<vector<int> >& mat, std::ostream& os, int prec, int width)
+{
+	std::ios::fmtflags old_flags = os.flags(); 
+	os.setf(ios::left, ios::adjustfield); 
+
+	for (int i = 0; i < (int)mat.size(); ++i)
+	{
+		for (int j = 0; j < (int)mat[0].size(); ++j)
+		{
+			os << std::setprecision(prec) << std::setw(width) << std::setfill(' ') 
+				<< mat[i][j];  
+		}
+		os << std::endl;
+	}
+
+	os.setf(old_flags);  
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Utilities 
 //////////////////////////////////////////////////////////////////////////

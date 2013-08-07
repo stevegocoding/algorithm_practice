@@ -6,7 +6,6 @@
 #include <iterator>
 #include <stdlib.h>
 #include <time.h>
-#include "gtest/gtest.h"
 
 using namespace std; 
 
@@ -267,6 +266,8 @@ int binary_search_rec(const vector<int>& data, int key, int left, int right)
 /// Unit Tests
 //////////////////////////////////////////////////////////////////////////
 
+/*
+
 int compare (const void * a, const void * b)
 {
 	return ( *(int*)a - *(int*)b );
@@ -304,3 +305,5 @@ TEST(BinarySearchTest, RecursiveImpl)
 
 	EXPECT_EQ(pos, 3); 
 } 
+
+*/ 
