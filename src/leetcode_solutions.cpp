@@ -1229,6 +1229,122 @@ public:
 	}
 };
 
+//////////////////////////////////////////////////////////////////////////
+
+class ConvertSortedListToBST : public c_solution<ConvertSortedListToBST>
+{
+	struct ListNode 
+	{
+		int val;
+		ListNode *next;
+		ListNode(int x) : val(x), next(NULL) {}
+	};
+
+	struct TreeNode 
+	{
+		int val;
+		TreeNode *left;
+		TreeNode *right;
+		TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+	};
+
+public:
+
+	TreeNode *sortedListToBST(ListNode *head)
+	{
+		if (!head)
+			return NULL; 
+		
+		ListNode *p = head;
+		int count = 0; 
+		while (p)
+		{
+			++count; 
+			p = p->next; 
+		}
+
+		if (count == 1)
+		{
+			return new TreeNode(head->val);
+		}
+		else 
+			return helper(head, count); 
+		
+	}
+
+	TreeNode *helper(ListNode *head, int k)
+	{
+		if (k <= 0)
+			return NULL;
+
+		ListNode *p = head;
+		int root_idx = k/2; 
+		for (int i = 0; i < root_idx; ++i)
+		{
+			p = p->next; 
+		}
+
+		TreeNode *root = new TreeNode(p->val);
+		root->left = helper(head, root_idx); 
+		root->right = helper(p->next, k-root_idx-1);
+
+		return root;
+	}
+
+	void delete_bst(TreeNode *node)
+	{
+		if (!node)
+			return; 
+		delete_bst(node->left);
+		delete_bst(node->right);
+		SAFE_DELETE(node); 
+	}
+
+	void test()
+	{
+		ListNode head(3); 
+		ListNode a(5); 
+		ListNode b(8); 
+
+		head.next = &a;
+		a.next = &b;
+
+		TreeNode *root = sortedListToBST(&head);
+
+		delete_bst(root);
+
+	}
+
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class ConvertSortedArrayToBST : public c_solution<ConvertSortedArrayToBST>
+{
+public:
+	TreeNode *sortedArrayToBST(vector<int> &num) 
+	{
+		return build_bst(num, 0, num.size()-1); 
+	}
+
+	TreeNode *build_bst(vector<int>& num, int start, int end)
+	{
+		if (start > end)
+			return NULL; 
+
+		int mid = (start + end) / 2;
+
+		TreeNode *root = new TreeNode(num[mid]); 
+		
+		root->left = build_bst(num, start, mid-1); 
+		root->right = build_bst(num, mid+1, end); 
+
+		return root; 
+	}
+};
+
+//////////////////////////////////////////////////////////////////////////
+
 
 class BalancedBinaryTree : public c_solution<BalancedBinaryTree>
 {
@@ -1458,7 +1574,9 @@ int main(int argc, char **argv)
 
 	// c_solution<FlattenBinaryTree>::run_test();
 
-	c_solution<PathSumII>::run_test(); 
+	// c_solution<PathSumII>::run_test(); 
+
+	c_solution<ConvertSortedListToBST>::run_test();
 
 	// c_solution<Permutations>::run_test(); 
 
