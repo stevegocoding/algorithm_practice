@@ -1348,6 +1348,43 @@ public:
 
 //////////////////////////////////////////////////////////////////////////
 
+class MaxDepth : public c_solution<MaxDepth>
+{
+public:
+
+	int max_depth;
+	int maxDepth(TreeNode *root) {
+		// Start typing your C/C++ solution below
+		// DO NOT write int main() function
+
+		max_depth = 0; 
+
+		if (!root)
+			return 0; 
+
+		helper(root, 0);
+
+		return max_depth;
+
+	}
+
+	void helper(TreeNode *node, int depth)
+	{
+		if (!node->left && !node->right)
+		{
+			max_depth = std::max(depth+1, max_depth);
+			return;
+		}
+
+		if (node->left)
+			helper(node->left, depth+1);
+		if (node->right)
+			helper(node->right, depth+1);
+	}
+};
+
+//////////////////////////////////////////////////////////////////////////
+
 class BinaryTreeFromInorderPostorder : public c_solution<BinaryTreeFromInorderPostorder> 
 {
 	/*
