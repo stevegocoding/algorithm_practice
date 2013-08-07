@@ -1128,6 +1128,108 @@ public:
 
 //////////////////////////////////////////////////////////////////////////
 
+class PathSumII : public c_solution<PathSumII>
+{
+	/*
+	 *	AC
+	 */
+public:
+
+	vector<vector<int> > all_paths;
+
+	vector<vector<int> > pathSum(TreeNode *root, int sum)
+	{
+		if (!root)
+			return all_paths;
+
+		vector<int> path;
+		path_sum_helper(root, sum, path);
+
+		return all_paths;
+	}
+
+
+	void path_sum_helper(TreeNode *node, int sum, vector<int>& path)
+	{
+		if (!node->left && !node->right)
+		{
+			path.push_back(node->val);
+			if (sum == node->val)
+			{
+				all_paths.push_back(path);
+			}
+			path.pop_back();
+			return; 
+		}
+		
+		if (node->left)
+		{
+			path.push_back(node->val); 
+			path_sum_helper(node->left, sum-node->val, path);
+			path.pop_back();
+		}
+		if (node->right)
+		{
+			path.push_back(node->val); 
+			path_sum_helper(node->right, sum-node->val, path);
+			path.pop_back(); 
+		}
+	}
+
+	void test()
+	{
+		TreeNode root(1);
+		
+		pathSum(&root, 0);
+	}
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class MinimumDepthBinaryTree : public c_solution<MinimumDepthBinaryTree>
+{
+	/*
+	 *	AC
+	 */
+public: 
+
+	int minDepth(TreeNode *root) 
+	{
+		if (!root)
+			return 0;
+
+		typedef std::pair<TreeNode*, int> elem;
+		
+		elem r(root, 1);
+		deque<elem> q; 
+		q.push_back(r);
+
+		while (!q.empty())
+		{
+			elem node = q.front(); 
+			q.pop_front(); 
+
+			if (!node.first->left && !node.first->right)
+			{
+				return node.second; 
+			}
+
+			if (node.first->left)
+				q.push_back(elem(node.first->left, node.second+1));
+			if (node.first->right)
+				q.push_back(elem(node.first->right, node.second+1));
+		}
+		
+		return -1;
+	}
+
+	void test()
+	{
+		TreeNode root(1);
+	}
+};
+
+
 class BalancedBinaryTree : public c_solution<BalancedBinaryTree>
 {
 	/*
@@ -1198,7 +1300,7 @@ public:
 
 		for (int i = 0; i < (int)results.size(); ++i)
 		{
-			for (int j = 0; j <= results[i].size(); ++j)
+			for (int j = 0; j <= (int)results[i].size(); ++j)
 			{
 				vector<int> ns = insert_at(results[i], num[end], j);
 				new_results.push_back(ns); 
@@ -1249,13 +1351,13 @@ public:
 			return results; 
 		}
 
-		for (int i = start; i < nums.size(); ++i)
+		for (int i = start; i < (int)nums.size(); ++i)
 		{
 			path.push_back(nums[i]); 
 
 			vector<vector<int> > r = combine_helper(nums, path, i+1, k); 
 			
-			for (int j = 0; j < r.size(); ++j)
+			for (int j = 0; j < (int)r.size(); ++j)
 			{
 				results.push_back(r[j]);
 			}
@@ -1307,7 +1409,7 @@ public:
 	{
 		results.push_back(path);
 		
-		for (int i = pos; i < s.size(); ++i)
+		for (int i = pos; i < (int)s.size(); ++i)
 		{
 			path.push_back(s[pos]);
 			subsets_helper(s, i+1, path, results);
@@ -1354,8 +1456,9 @@ int main(int argc, char **argv)
 
 	// c_solution<PascalTriangle>::run_test(); 
 
-	c_solution<FlattenBinaryTree>::run_test();
+	// c_solution<FlattenBinaryTree>::run_test();
 
+	c_solution<PathSumII>::run_test(); 
 
 	// c_solution<Permutations>::run_test(); 
 
