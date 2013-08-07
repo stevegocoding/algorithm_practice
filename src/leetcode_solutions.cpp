@@ -1321,6 +1321,9 @@ public:
 
 class ConvertSortedArrayToBST : public c_solution<ConvertSortedArrayToBST>
 {
+	/*
+	 *	AC
+	 */ 
 public:
 	TreeNode *sortedArrayToBST(vector<int> &num) 
 	{
@@ -1344,6 +1347,61 @@ public:
 };
 
 //////////////////////////////////////////////////////////////////////////
+
+class BinaryTreeFromInorderPostorder : public c_solution<BinaryTreeFromInorderPostorder> 
+{
+	/*
+	 *	AC
+	 */
+public: 
+	TreeNode *buildTree(vector<int> &inorder, vector<int> &postorder)
+	{
+		if (inorder.empty() || postorder.empty())
+			return NULL; 
+		
+		return build_tree_helper(inorder, postorder, 0, inorder.size()-1, 0, postorder.size()-1); 
+	}
+
+	TreeNode *build_tree_helper(vector<int> &inorder, 
+		vector<int> &postorder, 
+		int inorder_start, int inorder_end, 
+		int postorder_start, int postorder_end)
+	{
+		if (inorder_start > inorder_end || postorder_start > postorder_end)
+			return NULL; 
+		
+		int inorder_root = inorder_start;
+		for (int i = inorder_start; i <= inorder_end; ++i)
+		{
+			if (inorder[i] == postorder[postorder_end])
+			{
+				inorder_root = i;
+				break;
+			}
+		}
+
+		TreeNode *root = new TreeNode(inorder[inorder_root]);
+		
+		int num_left = inorder_root - inorder_start; 
+		root->left = build_tree_helper(inorder, postorder, inorder_start, inorder_root-1, postorder_start, postorder_start+num_left-1); 
+		root->right = build_tree_helper(inorder, postorder, inorder_root+1, inorder_end, postorder_start+num_left, postorder_end-1); 
+		
+		return root; 
+	}
+
+	void test()
+	{
+		int a[] = {2, 1}; 
+		int b[] = {2, 1}; 
+
+		vector<int> inorder(a, a+sizeof(a)/sizeof(int)); 
+		vector<int> postorder(b, b+sizeof(b)/sizeof(int));
+		
+		buildTree(inorder, postorder);
+
+	}
+	
+};
 
 
 class BalancedBinaryTree : public c_solution<BalancedBinaryTree>
@@ -1576,7 +1634,10 @@ int main(int argc, char **argv)
 
 	// c_solution<PathSumII>::run_test(); 
 
-	c_solution<ConvertSortedListToBST>::run_test();
+	// c_solution<ConvertSortedListToBST>::run_test();
+
+	c_solution<BinaryTreeFromInorderPostorder>::run_test(); 
+
 
 	// c_solution<Permutations>::run_test(); 
 
