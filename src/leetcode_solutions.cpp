@@ -1089,6 +1089,45 @@ public:
 
 //////////////////////////////////////////////////////////////////////////
 
+class PathSum : public c_solution<PathSum>
+{
+	/*
+	 *	AC
+	 */
+public:
+
+	bool hasPathSum(TreeNode *root, int sum)
+	{
+		if (!root)
+			return false;
+
+		return path_sum_helper(root, sum);
+	}
+
+
+	bool path_sum_helper(TreeNode *node, int sum)
+	{
+		if (!node->left && !node->right)
+		{
+			return (sum-node->val == 0); 
+		}
+		
+		bool left = false;
+		if (node->left)
+			left = path_sum_helper(node->left, sum-node->val);
+		
+		bool right = false;
+		if (node->right)
+			right = path_sum_helper(node->right, sum-node->val);
+
+		return left || right;
+	}
+
+
+};
+
+//////////////////////////////////////////////////////////////////////////
+
 class BalancedBinaryTree : public c_solution<BalancedBinaryTree>
 {
 	/*
