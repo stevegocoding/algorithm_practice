@@ -1385,6 +1385,50 @@ public:
 
 //////////////////////////////////////////////////////////////////////////
 
+class SymmetricTree : public c_solution<SymmetricTree>
+{
+public:
+	bool isSymmetric(TreeNode *root) 
+	{
+		// Start typing your C/C++ solution below
+		// DO NOT write int main() function
+		if (root == NULL) return true;
+		return helper(root->left,root->right);
+	}
+	bool helper(TreeNode *left,TreeNode *right)
+	{
+		if( left == NULL && right == NULL) return true;
+		if( left != NULL && right == NULL) return false;
+		if( left == NULL && right != NULL) return false;
+		if( left->val != right->val) 
+			return false;
+		else
+			return helper(left->left,right->right) && helper(left->right,right->left);
+	}
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class SameTree : public c_solution<SameTree>
+{
+public:
+	bool isSameTree(TreeNode *p, TreeNode *q) {
+		// Start typing your C/C++ solution below
+		// DO NOT write int main() function
+
+		if (!p && !q)
+			return true;
+
+		if (!p || !q)
+			return false;
+
+		if (p->val != q->val)
+			return false;
+
+		return isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
+	}
+};
+
 class BinaryTreeFromInorderPostorder : public c_solution<BinaryTreeFromInorderPostorder> 
 {
 	/*
@@ -1637,6 +1681,63 @@ public:
 };
 
 
+//////////////////////////////////////////////////////////////////////////
+
+class RecoverBST : public c_solution<RecoverBST>
+{
+public:
+	void recoverTree(TreeNode *root)
+	{
+		
+		 
+	}
+};
+
+
+//////////////////////////////////////////////////////////////////////////
+
+
+class InterleavingString : public c_solution<InterleavingString>
+{
+	/*
+	 *	Exceeded Time Limit on large data tests using recursion
+	 */
+
+public: 
+	bool isInterleave(string s1, string s2, string s3)
+	{
+		if (s3.length() != s1.length() + s2.length())
+			return false;
+
+		return helper(s1, s2, s3, 0, 0, 0);
+	}
+
+	bool helper(string& s1, string& s2, string& s3, int start1, int start2, int start3)
+	{
+		if (start1 == s1.length() && start2 == s2.length() && start3 == s3.length())
+			return true; 
+
+		bool match_s1 = false;
+		if (start1 < (int)s1.length() && s1[start1] == s3[start3])
+			match_s1 = helper(s1, s2, s3, start1+1, start2, start3+1); 
+		bool match_s2 = false; 
+		if (start2 < (int)s2.length() && s2[start2] == s3[start3])
+			match_s2 = helper(s1, s2, s3, start1, start2+1, start3+1); 
+
+		return match_s1 || match_s2; 
+	}
+
+	void test()
+	{
+		string s1 = ""; 
+		string s2 = "abc";
+		string s3 = "abc";
+
+		bool result = isInterleave(s1, s2, s3); 
+	}
+};
+
+
 int main(int argc, char **argv)
 {
 	// c_leetcode_solution<PalindromePartitioning>::run_test();
@@ -1673,7 +1774,9 @@ int main(int argc, char **argv)
 
 	// c_solution<ConvertSortedListToBST>::run_test();
 
-	c_solution<BinaryTreeFromInorderPostorder>::run_test(); 
+	//c_solution<BinaryTreeFromInorderPostorder>::run_test(); 
+
+	c_solution<InterleavingString>::run_test(); 
 
 
 	// c_solution<Permutations>::run_test(); 
