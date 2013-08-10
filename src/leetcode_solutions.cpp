@@ -1729,14 +1729,269 @@ public:
 
 	void test()
 	{
+		/*
 		string s1 = ""; 
 		string s2 = "abc";
 		string s3 = "abc";
 
 		bool result = isInterleave(s1, s2, s3); 
+		*/ 
 	}
 };
 
+//////////////////////////////////////////////////////////////////////////
+
+class UniqueBST : public c_solution<UniqueBST>
+{
+public:
+
+	int numTrees(int n)
+	{
+		// dp[i] is the number of BSTs with i nodes
+		// dp[n] = \sum_{i=1}^n f(i-1) * f(n-i), f(0) = 1, f(1) = 1;
+		vector<int> dp(n+1);		
+		
+		if (n <= 1)
+			return 1;
+
+		dp[0] = 1;
+		dp[1] = 1;
+
+		for (int i = 2; i <= n; ++i)
+		{
+			dp[i] = 0;
+			for (int left = 0; left < i; ++left)
+			{
+				int left_ways = dp[left]; 
+				int right_ways = dp[i-left-1]; 
+				dp[i] += left_ways * right_ways;
+			}
+		}
+
+		return dp[n]; 
+	}
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class UniqueBSTII : public c_solution<UniqueBSTII>
+{
+public:
+	
+	vector<TreeNode *> generateTrees(int n)
+	{
+		return generate_trees(1, n); 
+	}
+
+	vector<TreeNode*> generate_trees(int start, int end)
+	{
+		if (start > end)
+			return vector<TreeNode*>(1, (TreeNode*)NULL);
+		
+		vector<TreeNode*> results;
+		
+		for (int i = start; i <= end; ++i)
+		{
+			vector<TreeNode*> left_subtrees = generate_trees(start, i-1);
+			vector<TreeNode*> right_subtrees = generate_trees(i+1, end);
+
+			// For each left subtree and each right subtree, create a root node
+			// with value i and then link the two subtrees to the root 
+			for (int j = 0; j < (int)left_subtrees.size(); ++j)
+			{
+				for (int k = 0; k < (int)right_subtrees.size(); ++k)
+				{
+					TreeNode *root = new TreeNode(i); 
+					root->left = left_subtrees[j];
+					root->right = right_subtrees[k]; 
+					results.push_back(root); 
+				}
+			}
+		}
+		
+		return results; 
+	}
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class RestoreIPAddress : public c_solution<RestoreIPAddress>
+{
+public: 
+	vector<string> restoreIpAddresses(string s) 
+	{
+		vector<string> results; 
+		results = restore_ip_helper(s, 0, 0); 
+
+		return results;
+	}
+
+	
+	vector<string> restore_ip_helper(string& s, int start, int num_sec)
+	{
+		vector<string> results;
+
+		if (start >= s.length())
+			return results;
+
+		if (num_sec == 3 && start < s.length() - 4)
+			return results;
+		
+		if (start >= s.length() - 4 && num_sec == 3)
+		{
+			string sec = s.substr(start); 
+			if (is_valid_ip_section(sec))
+				results.push_back(sec); 
+			
+			return results; 
+		}
+		
+		for (int i = 1; i <= 3; ++i)
+		{
+			vector<string> ip = restore_ip_helper(s, start+i, num_sec+1);  
+
+			for (int j = 0; j < (int)ip.size(); ++j)
+			{
+				string new_sec = s.substr(start, i); 
+				if (is_valid_ip_section(new_sec))
+				{
+					string new_ip = new_sec + "." + ip[j]; 
+					results.push_back(new_ip); 
+				}
+			}
+		}
+
+		return results;
+	}
+
+	/*
+	bool is_valid_ip_section(string& s)
+	{
+		if (s.length() > 3 )
+			return false; 
+		
+		if (!(s[0] > '0' && s[0] <= '2'))
+			return false; 
+
+		if (s.length() == 2 && !(s[1] >= '0' && s[1] <= '5'))
+			return false; 
+
+		if (s.length() == 3 && !(s[2] >= '0' && s[2] <= '5'))
+			return false;
+
+		return true; 
+	}
+	*/
+
+	bool is_valid_ip_section(string& s)
+	{
+		if (s.length() > 1 && s[0] == '0')
+			return false; 
+		
+		int num = 0; 
+		stringstream ss(s); 
+		ss >> num;
+		if (num >= 0 && num <= 255) 
+			return true; 
+		else 
+			return false; 
+	}
+
+	void test()
+	{
+		restoreIpAddresses("010010");
+	}
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class ReverseLinkedListII : public c_solution<ReverseLinkedListII> 
+{
+	struct ListNode 
+	{
+		int val;
+		ListNode *next;
+		ListNode(int x) : val(x), next(NULL) {}
+	};
+	
+public:
+	 ListNode *reverseBetween(ListNode *head, int m, int n) 
+	 {
+		 if (!head)
+			 return NULL; 
+		 
+		 ListNode dummy(0);
+		 dummy.next = head; 
+		 ListNode *prev_m = NULL;
+		 ListNode *prev = &dummy;
+		 
+		 for (int i = 1; i <= n; ++i)
+		 {
+			 if (i == m)
+				 prev_m = prev;
+			 
+			 if (i > m && i <= n)
+			 {
+				 prev->next = head->next;
+				 head->next = prev_m->next; 
+				 prev_m->next = head; 
+				 head = prev;
+			 }
+
+			 prev = head;
+			 head = head->next;
+		 }
+
+		 return dummy.next;
+	 }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class DecodeWays : public c_solution<DecodeWays>
+{
+public: 
+	
+	int numDecodings(string s) 
+	{
+		int n = s.length(); 
+		vector<int> dp(n);
+
+		dp[0] = 1; 
+		
+		/*
+		dp[i] = dp[i-1] + 2 (if (s[i-1],s[i]) is valid)
+			  = dp[i-1] + 1 
+		*/
+		for (int i = 1; i < n; ++i)
+		{
+			if (is_valid_code(s.substr(i, 1)))
+			{
+				if (is_valid_code(s.substr(i-1, 2)))
+					dp[i] = dp[i-1] + 2; 
+				else
+					dp[i] = dp[i-1] + 1;
+			}
+		}
+
+		return dp[n-1]; 
+	}
+
+	bool is_valid_code(string& s)
+	{
+		if (s.length() > 2)
+			return false;
+		
+		if (!(s[0] >= '1' && s[0] <= 26))
+			return false; 
+		
+		if (s.length() == 2 && !(s[1] >= '1' && s[1] <= 26))
+			return false;
+		
+		return true; 
+	}
+	
+};
 
 int main(int argc, char **argv)
 {
@@ -1776,7 +2031,7 @@ int main(int argc, char **argv)
 
 	//c_solution<BinaryTreeFromInorderPostorder>::run_test(); 
 
-	c_solution<InterleavingString>::run_test(); 
+	// c_solution<InterleavingString>::run_test(); 
 
 
 	// c_solution<Permutations>::run_test(); 
@@ -1784,6 +2039,8 @@ int main(int argc, char **argv)
 	// c_solution<Combinations>::run_test(); 
 
 	// c_solution<Subsets>::run_test(); 
+
+	c_solution<RestoreIPAddress>::run_test();
 
 	return 0;
 }
