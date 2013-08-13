@@ -52,7 +52,7 @@ public:
 		{
 			if (dp_mem[start][i])
 			{
-				vector<vector<string>> res = partition_helper(s, i+1, dp_mem);
+				vector<vector<string> > res = partition_helper(s, i+1, dp_mem);
 				for (unsigned int j = 0; j < res.size(); ++j)
 				{
 					res[j].insert(res[j].begin(), s.substr(start, i-start+1));
@@ -439,11 +439,9 @@ public:
 
 //////////////////////////////////////////////////////////////////////////
 
+/*
 class WordLadder : public c_solution<WordLadder>
 {
-	/*
-	 *	TLE on large test
-	 */
 public:
 
 	int min_length;
@@ -512,6 +510,7 @@ public:
 		
 	}
 };
+*/
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -1638,7 +1637,7 @@ class Subsets : public c_solution<Subsets>
 public:
 	vector<vector<int> > subsets(vector<int> &S)
 	{
-		sort(S.begin(), S.end());
+        sort(S.begin(), S.end());
 		vector<vector<int> > results;
 		vector<int> path; 
 		subsets_helper(S, 0, path, results); 
@@ -1954,44 +1953,343 @@ public:
 	
 	int numDecodings(string s) 
 	{
-		int n = s.length(); 
-		vector<int> dp(n);
-
-		dp[0] = 1; 
-		
-		/*
-		dp[i] = dp[i-1] + 2 (if (s[i-1],s[i]) is valid)
-			  = dp[i-1] + 1 
-		*/
-		for (int i = 1; i < n; ++i)
-		{
-			if (is_valid_code(s.substr(i, 1)))
-			{
-				if (is_valid_code(s.substr(i-1, 2)))
-					dp[i] = dp[i-1] + 2; 
-				else
-					dp[i] = dp[i-1] + 1;
-			}
-		}
-
-		return dp[n-1]; 
+        int n = s.length();
+        vector<int> dp(n);
+        
+        for (int i = 1; i < n; ++i)
+        {
+            
+        }
+        
+        return dp[n-1]; 
 	}
-
-	bool is_valid_code(string& s)
-	{
-		if (s.length() > 2)
-			return false;
-		
-		if (!(s[0] >= '1' && s[0] <= 26))
-			return false; 
-		
-		if (s.length() == 2 && !(s[1] >= '1' && s[1] <= 26))
-			return false;
-		
-		return true; 
-	}
-	
 };
+
+//////////////////////////////////////////////////////////////////////////
+
+class GrayCode : public c_solution<GrayCode>
+{
+    public:
+        vector<int> grayCode(int n)
+        {
+            vector<int> results;
+            
+            if (n <= 1)
+            {
+                results.push_back(0);
+                if (n == 1)
+                    results.push_back(1);
+
+                return results; 
+            }
+
+            vector<int> prev_results = grayCode(n-1);
+            int highest_bit = 1 << (n-1);
+            
+            results.insert(results.end(), prev_results.begin(), prev_results.end());
+            for (int i = prev_results.size() - 1; i >= 0;  --i)
+            {
+                results.push_back(prev_results[i] + highest_bit);
+            }
+            
+            return results;
+        }
+                   
+        void test()
+        {
+            vector<int> codes = grayCode(2);
+            cout << "Hello" << std::endl;
+        }
+}; 
+
+//////////////////////////////////////////////////////////////////////////
+
+class ScrambleString : public c_solution<ScrambleString>
+{
+    public:
+       bool isScramble(string s1, string s2) 
+       {
+           bool ret = swap_helper(s1, s2, 0);
+           return ret;
+       }
+
+       bool swap_helper(string& s, string& t, int start)
+       {
+           if (start == s.length())
+               return false; 
+           
+           if (s.compare(t) == 0)
+               return true;
+
+           for (int i = start+1; i < s.length(); ++i)
+           {
+               char temp = s[start]; 
+               s[start] = s[i];
+               s[i] = temp;
+               
+               bool ret = swap_helper(s, t, i);
+               if (ret)
+                   return ret; 
+           }
+       }
+       
+       void test()
+       {
+           string s = "rgtae";
+           string t = "great"; 
+           
+           bool ret = isScramble(s, t);
+           cout << ret << std::endl; 
+       }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class PartitionList : c_solution<PartitionList>
+{
+    struct ListNode 
+    {
+        int val;
+        ListNode *next;
+        ListNode(int x) : val(x), next(NULL) {}
+    };
+   
+    public:
+        ListNode *partition(ListNode *head, int x)
+        {
+            ListNode *root = new ListNode(-1); 
+            ListNode *pivot = new ListNode(x); 
+            ListNode *root_last = root; 
+            ListNode *pivot_last = pivot; 
+
+            ListNode *p = head;
+            
+            while (p)
+            {
+                if (p->val < x)
+                {
+                    root_last->next = p; 
+                    root_last = p;
+                }
+                else 
+                {
+                    pivot_last->next = p;
+                    pivot_last = p; 
+                    pivot_last = NULL;
+                }
+                p = p->next; 
+            }
+
+            root_last->next = pivot->next; 
+            return root->next;
+        }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class RemoveDuplicateSortedList : public c_solution<RemoveDuplicateSortedList> 
+{    
+    struct ListNode 
+    {
+        int val;
+        ListNode *next;
+        ListNode(int x) : val(x), next(NULL) {}
+    };
+   
+    public:
+        ListNode *deleteDuplicates(ListNode *head)
+        {
+            ListNode *p = head; 
+            ListNode *q = NULL;
+            
+            if (!head || !head->next)
+                return p; 
+            q = p->next; 
+
+            while (q)
+            {
+                if (p->val != q->val)
+                {
+                    p = p->next; 
+                    q = q->next;
+                }
+                else 
+                {
+                    ListNode *t = q; 
+                    q = q->next;
+                    p->next = q; 
+                    delete t;
+                }
+            }
+            
+            return head;
+        }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class RemoveDuplicateSortedListII : public c_solution<RemoveDuplicateSortedListII>
+{
+    /*
+     * AC 
+     */
+    struct ListNode 
+    {
+        int val;
+        ListNode *next;
+        ListNode(int x) : val(x), next(NULL) {}
+    };
+      
+public:
+    ListNode *deleteDuplicates(ListNode *head)
+    {
+        if (!head || !head->next)
+            return head;
+
+        ListNode *dummy = new ListNode(head->val - 1); 
+        dummy->next = head; 
+
+        ListNode *p = dummy; 
+        ListNode *q = p->next;
+
+        while (q)
+        {
+            ListNode *t = q; 
+            while (t->next && t->next->val == t->val)
+                t = t->next; 
+            if (q != t)
+            {
+                p->next = t->next; 
+                while (q != t->next)
+                {
+                    ListNode *del_p = q; 
+                    q = q->next;
+                    delete del_p;
+                }
+            }
+            else
+            {
+                p = p->next;
+                q = q->next;
+            }
+        }
+
+        return dummy->next;
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class SearchRotatedSortedArray : public c_solution<SearchRotatedSortedArray>
+{
+    public:
+        int search(int A[], int n, int target)
+        {
+            int low = 0;
+            int high = n-1;
+            
+            while (low <= high)
+            {
+                int mid = (low+high) / 2; 
+                if (A[mid] == target)
+                    return mid; 
+                
+                if (A[mid] >= A[low])
+                {
+                    if (target >=  A[low] && target < A[mid])
+                        high = mid - 1; 
+                    else 
+                        low = mid + 1; 
+                }
+                else
+                {
+                    if (target > A[mid] && target <= A[high])
+                        low = mid + 1; 
+                    else
+                        high = mid - 1; 
+                }
+            }
+            
+            return -1; 
+        }
+}; 
+
+//////////////////////////////////////////////////////////////////////////
+
+class SearchRotatedSortedArrayII : public c_solution<SearchRotatedSortedArrayII>
+{
+public:
+    bool search(int A[], int n, int target)
+    {
+        int low = 0;
+        int high = n-1;
+
+        while (low <= high)
+        {
+            int mid = (low+high) / 2; 
+            if (A[mid] == target)
+                return true; 
+
+            if (A[mid] > A[low])
+            {
+                if (target >=  A[low] && target < A[mid])
+                    high = mid - 1; 
+                else 
+                    low = mid + 1; 
+            }
+            else if (A[mid] < A[low])
+            {
+                if (target > A[mid] && target <= A[high])
+                    low = mid + 1; 
+                else
+                    high = mid - 1; 
+            }
+            else 
+                ++low; 
+        }
+
+        return false; 
+    }   
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class RemoveDuplicatesSortedArray : public c_solution<RemoveDuplicatesSortedArray>
+{
+public:
+    int removeDuplicates(int A[], int n) 
+    {
+        if (n == 0)
+            return 0; 
+        if (n == 1)
+            return 1;
+
+        int cur = 0; 
+        int p = 1;
+
+        while (p < n)
+        {
+            while (A[p] == A[cur] && p < n)
+                ++p;
+                
+            // if a number differente from cur is not found, then break out
+            if (p == n)
+                break;
+                
+            A[++cur] = A[p++];
+        }
+        return cur+1;
+    } 
+    
+    void test()
+    {
+        int a[] = {1, 1};
+        int ret = removeDuplicates(a, 2);
+    }
+}; 
+
+////////////////////////////////////////////////////////////////////////// 
+
 
 int main(int argc, char **argv)
 {
@@ -2033,14 +2331,20 @@ int main(int argc, char **argv)
 
 	// c_solution<InterleavingString>::run_test(); 
 
-
 	// c_solution<Permutations>::run_test(); 
 
 	// c_solution<Combinations>::run_test(); 
 
 	// c_solution<Subsets>::run_test(); 
 
-	c_solution<RestoreIPAddress>::run_test();
+	// c_solution<RestoreIPAddress>::run_test();
+
+    // c_solution<GrayCode>::run_test();
+    // c_solution<ScrambleString>::run_test();
+
+    c_solution<RemoveDuplicatesSortedArray>::run_test();
+
 
 	return 0;
 }
+
