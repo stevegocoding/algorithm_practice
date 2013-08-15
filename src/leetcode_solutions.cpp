@@ -2531,7 +2531,100 @@ public:
 
 //////////////////////////////////////////////////////////////////////////
 
+class SSearch2DMatrix : public c_solution<SSearch2DMatrix>
+{
+public: 
+    bool searchMatrix(vector<vector<int> > &matrix, int target) 
+    {
+        int rows = (int)matrix.size(); 
+        int cols = (int)matrix[0].size(); 
+        
+        int r = 0;
+        int c = cols-1;
+        
+        while (r >= 0 && r < rows && c >= 0 && c < cols)
+        {
+            if (matrix[r][c] == target)
+                return true;
+            if (matrix[r][c] > target)
+            {
+                --c;
+            }
+            else 
+            {
+                ++r; 
+            }
+        }
+        
+        return false;
+    }
+};
 
+//////////////////////////////////////////////////////////////////////////
+
+class SetMatrixZero : public c_solution<SetMatrixZero>
+{
+public:
+    void setZeroes(vector<vector<int> > &matrix) 
+    {
+        int rows = (int)matrix.size();
+        int cols = (int)matrix[0].size(); 
+        
+        bool zero_row0 = false;
+        bool zero_col0 = false;
+        
+        for (int i = 0; i < rows; ++i)
+        {
+            if (matrix[i][0] == 0)
+            {
+                zero_col0 = true;
+                break;
+            }
+        }
+        
+        for (int j = 0; j < cols; ++j)
+        {
+            if (matrix[0][j] == 0)
+            {
+                zero_row0 = true;
+                break;
+            }
+        }
+        
+        for (int i = 1; i < rows; ++i)
+        {
+            for (int j = 1; j < cols; ++j)
+            {
+                if (matrix[i][j] == 0)
+                {
+                    matrix[0][j] = 0; 
+                    matrix[i][0] = 0; 
+                }
+            }
+        }
+        
+       for (int i = 1; i < rows; ++i)
+       {
+            for (int j = 1; j < cols; ++j)
+            {
+                if (matrix[0][j] == 0 || matrix[i][0] == 0)
+                    matrix[i][j] = 0; 
+            }
+       }
+       
+       if (zero_row0)
+       {
+           for (int i = 0; i < cols; ++i)
+               matrix[0][i] = 0; 
+       }
+       
+       if (zero_col0)
+       {    
+           for (int i = 0; i < rows; ++i)
+               matrix[i][0] = 0; 
+       }
+    }
+};
 
 
 int main(int argc, char **argv)
