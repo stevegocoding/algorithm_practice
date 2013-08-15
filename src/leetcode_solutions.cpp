@@ -2626,6 +2626,234 @@ public:
     }
 };
 
+//////////////////////////////////////////////////////////////////////////
+
+class ClimbingStairs : public c_solution<ClimbingStairs>
+{
+public:
+    int climbStairs(int n)
+    {
+        vector<int> dp(n+1);
+
+        dp[0] = 0;
+        dp[1] = 1; 
+        
+        for (int i = 2; i <= n; ++i)
+        {
+            dp[i] = dp[i-2] + dp[i-1];
+        }
+        return dp[n];
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class SqrtX : public c_solution<SqrtX>
+{
+public:
+    int sqrt(int x)
+    {
+        if (x == 0)
+            return 0;
+        double last = 0;
+        double res = 1;
+        while (res != last)
+        {
+            last = res;
+            res = (res + x / res) / 2;
+        }
+        return (int)res;
+    }
+    
+    /**
+     * Binary Search
+     * sqrt(x) always <= (x / 2 + 1)
+     */
+    int sqrt2(int x)
+    {
+        long long i = 0;
+        long long j = x / 2 + 1;
+        
+        while (i < j)
+        {
+            long long mid = (i + j) / 2; 
+            long long sq = mid * mid; 
+            if (sq == x)
+                return mid; 
+            if (sq < x)
+                i = mid + 1; 
+            else j = mid - 1;
+        }
+        return j;
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class PlusOne : public c_solution<PlusOne>
+{
+public:
+    vector<int> plusOne(vector<int> &digits)
+    {
+        int idx = (int)digits.size() - 1;
+       
+        int carry = 0;
+        int plus = 1;
+        for (; idx >= 0; --idx)
+        {
+            int t = digits[idx] + plus + carry; 
+            carry = t / 10;
+            digits[idx] = t % 10;
+            plus = 0;
+        }
+        
+        if (carry == 1)
+            digits.insert(digits.begin(), 1);
+        
+        return digits;
+    }
+};
+
+
+//////////////////////////////////////////////////////////////////////////
+
+class ValidNumber : public c_solution<ValidNumber>
+{
+public:
+    
+    bool isNumber(const char *s)
+    {
+        enum InputType 
+        {
+            INVALID,    // 0
+            SPACE,      // 1
+            SIGN,       // 2
+            DIGIT,      // 3
+            DOT,        // 4
+            EXPONENT,   // 5
+            NUM_INPUTS  // 6
+        }; 
+
+        int transitionTable[][NUM_INPUTS] = {
+            -1,  0,  3,  1,  2, -1,     // next states for state 0
+            -1,  8, -1,  1,  4,  5,     // next states for state 1
+            -1, -1, -1,  4, -1, -1,     // next states for state 2
+            -1, -1, -1,  1,  2, -1,     // next states for state 3
+            -1,  8, -1,  4, -1,  5,     // next states for state 4
+            -1, -1,  6,  7, -1, -1,     // next states for state 5
+            -1, -1, -1,  7, -1, -1,     // next states for state 6
+            -1,  8, -1,  7, -1, -1,     // next states for state 7
+            -1,  8, -1, -1, -1, -1,     // next states for state 8
+        };
+        
+        int state = 0;
+        while (*s != '\0') 
+        {
+            InputType inputType = INVALID;
+            if (isspace(*s))
+                inputType = SPACE;
+            else if (*s == '+' || *s == '-')
+                inputType = SIGN;
+            else if (isdigit(*s))
+                inputType = DIGIT;
+            else if (*s == '.')
+                inputType = DOT;
+            else if (*s == 'e' || *s == 'E')
+                inputType = EXPONENT;
+
+            // Get next state from current state and input symbol
+            state = transitionTable[state][inputType];
+
+            // Invalid input
+            if (state == -1) return false;
+            else ++s;
+        }
+        // If the current state belongs to one of the accepting (final) states,
+        // then the number is valid
+        return state == 1 || state == 4 || state == 7 || state == 8;
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class AddBinary : public c_solution<AddBinary>
+{
+    /**
+     * AC
+     */
+public:
+    string addBinary(string a, string b)
+    {
+        string& shorter = (a.length() < b.length()) ? a : b;
+        int len_diff = (int)(a.length() - b.length());
+        for (int i = 0; i < std::abs(len_diff); ++i)
+            shorter.insert(shorter.begin(), '0');
+        
+        int idx = (int)a.length()-1;
+        int carry = 0;
+        string result(a.length()+1, '0');
+        for (; idx >= 0; --idx)
+        {
+            int t = (int)(a[idx] - '0') + (int)(b[idx] - '0') + carry; 
+            carry = t / 2;
+            result[idx] = (char)('0' + t % 2);
+        }
+        
+        if (carry == 1)
+        {
+            result.insert(result.begin(),'1'); 
+            result.resize(a.length()+1);
+        }
+        else
+            result.resize(a.length());
+       
+        return result;
+    }
+    
+    void test()
+    {
+        string a = "11"; 
+        string b = "1";
+        string result = addBinary(a, b);
+        cout << result << std::endl; 
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class MinimumPathSum : public c_solution<MinimumPathSum>
+{
+public:
+    int minPathSum(vector<vector<int> > &grid)
+    {
+        int rows = (int)grid.size();
+        int cols = (int)grid[0].size();
+
+        /*
+         * dp(i, j) represents the minimum sum from grid(0, 0) to grid(i, j)
+         */
+        vector<vector<int> > dp(rows, vector<int>(cols, 0));
+        
+        dp[0][0] = grid[0][0];
+        for (int i = 1; i < cols; ++i)
+            dp[0][i] = dp[0][i-1] + grid[0][i];
+        for (int j = 1; j < rows; ++j)
+            dp[j][0] = dp[j-1][0] + grid[j][0];
+        
+        for (int i = 1; i < rows; ++i)
+        {
+            for (int j = 1; j < cols; ++j)
+            {
+                dp[i][j] = min(dp[i-1][j] + grid[i][j], dp[i][j-1] + grid[i][j]);
+            }
+        }
+
+        return dp[rows-1][cols-1];
+    }
+};
+
+
+
 
 int main(int argc, char **argv)
 {
@@ -2682,7 +2910,9 @@ int main(int argc, char **argv)
     
     // c_solution<RemoveDuplicatesSortedArrayII>::run_test();
     
-    c_solution<SimplifyPath>::run_test(); 
+    // c_solution<SimplifyPath>::run_test(); 
+
+    c_solution<AddBinary>::run_test();
 
 
 	return 0;
