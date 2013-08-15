@@ -42,7 +42,7 @@ public:
 	vector<vector<string> > partition_helper(const string& s, int start, vector<vector<bool> >& dp_mem)
 	{	
 		vector<vector<string> > pa;
-		if (start == s.length())
+		if (start == (int)s.length())
 		{
 			pa.push_back(vector<string>()); 
 			return pa;
@@ -2290,6 +2290,249 @@ public:
 
 ////////////////////////////////////////////////////////////////////////// 
 
+class RemoveDuplicatesSortedArrayII: public c_solution<RemoveDuplicatesSortedArrayII>
+{
+public:
+    int removeDuplicates(int A[], int n)
+    {    
+        int i=0,c=1;
+        int j;
+        if (n<=2) return n;
+
+        for (j=1;j<n;j++)
+        {            
+            if (A[j] != A[i])
+            {                
+                A[++i]=A[j];
+                c=1;
+            }
+            else
+            {
+                if (c <2)
+                {
+                    c++;
+                    A[++i]=A[j];
+                }
+            }
+        }
+        return i+1;  
+    }
+    
+    void test()
+    {
+        int a[] = {1, 1, 1};
+        int ret = removeDuplicates(a, 3);
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class WordSearch : public c_solution<WordSearch>
+{
+public:
+     bool exist(vector<vector<char> > &board, string word) 
+     {
+         int rows = board.size();
+         int cols = board[0].size(); 
+
+         vector<vector<bool> > visited(rows, vector<bool>(cols, false)); 
+
+         for (int i = 0; i < board.size(); ++i)
+         {
+             for (int j = 0; j < board[0].size(); ++j)
+                 if (dfs(i, j, 0, word, board, visited)) return true;
+         }
+         
+         return false;
+     }
+     
+     bool dfs(int row, int col, 
+             int depth, 
+             string& word, 
+             vector<vector<char> >& board, 
+             vector<vector<bool> >& visited)
+     {
+         if (visited[row][col] || board[row][col] != word[depth])
+             return false; 
+         
+         if (depth == word.length() - 1)
+             return true; 
+         
+         visited[row][col] = true; 
+         if (row != 0 && dfs(row-1, col, depth+1, word, board, visited)) return true;
+         if (row != board.size()-1 && dfs(row+1, col, depth+1, word, board, visited)) return true;
+         if (col != 0 && dfs(row, col-1, depth+1, word, board, visited)) return true;
+         if (col != board[0].size()-1 && dfs(row, col+1, depth+1, word, board, visited)) return true; 
+                 
+         visited[row][col] = false; 
+
+         return false;
+     }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class MinimumWindowSubstring : public c_solution<MinimumWindowSubstring>
+{
+public:
+    /*
+    string minWindow(string S, string T)
+    {
+        
+    }
+    */ 
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class SortColors : public c_solution<SortColors>
+{
+public:
+    void sortColors(int A[], int n)
+    {
+        int red = 0, white = 0, blue = n-1; 
+        for (white = 0; white <= blue;)
+        {
+            if (A[white] == 0)
+                swap(A[red++], A[white++]); 
+            else if (A[white] == 2)
+                swap(A[blue--], A[white]);
+            else 
+                ++white;
+        }
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class EditDistance : public c_solution<EditDistance>
+{
+    int minDistance(string word1, string word2)
+    {
+        /**
+         * dp(i, j) represnets the minimum edit distance from 
+         * substring word1[0...i] to substring word2[0...j]
+         */ 
+        int rows = (int)word1.length() + 1;
+        int cols = (int)word2.length() + 1;
+        vector<vector<int> > dp(rows, vector<int>(cols, 0));
+        
+        for (int i = 0; i < rows; ++i)
+        {
+            dp[i][0] = i;
+        }
+        for (int j = 0; j < cols; ++j)
+        {
+            dp[0][j] = j;
+        }
+        
+        for (int i = 1; i < rows; ++i)
+        {
+            char ci = word1[i-1]; 
+            for (int j = 1; j < cols; ++j)
+            {
+                char cj = word2[j-1]; 
+                if (ci == cj)
+                {
+                    dp[i][j] = dp[i-1][j-1];
+                }
+                else 
+                {
+                    // Modify ci to cj
+                    int d_edit = dp[i-1][j-1] + 1; 
+                    
+                    // Add cj to wordp[0, i)
+                    int d_add = dp[i][j-1] + 1;
+                    
+                    // Delete ci from wordp[0, i)
+                    int d_del = dp[i-1][j] + 1; 
+                    
+                    int min_d = min(d_edit, d_add); 
+                    min_d = min(min_d, d_del); 
+                    dp[i][j] = min_d; 
+                }
+            }
+        }
+
+        int result = dp[rows-1][cols-1];
+        return result; 
+    }
+}; 
+
+//////////////////////////////////////////////////////////////////////////
+
+class SimplifyPath : c_solution<SimplifyPath>
+{
+    /**
+     * AC, code needs to be cleaned
+     */
+public:
+    string simplifyPath(string path)
+    {
+        vector<string> p; 
+        
+        int idx = 1; 
+        while (idx < (int)path.length())
+        {
+            if (path[idx] == '/')
+            {
+                ++idx; 
+                continue;
+            }
+            
+            int cur = idx;
+            
+            while (path[idx] != '/' && idx < (int)path.length())
+                ++idx;
+            
+            if (idx == path.length())
+            {
+                string last = path.substr(cur);
+                if (last.compare("..") == 0)
+                {
+                    if (!p.empty())
+                        p.pop_back();
+                }
+                else if (last.compare(".") != 0)
+                    p.push_back(last);
+                break;
+            }
+            
+            string str = path.substr(cur, idx-cur);
+            if (str.compare("..") == 0)
+            {
+                if (!p.empty())
+                    p.pop_back();
+            }
+            else if (str.compare(".") != 0)
+                p.push_back(str);
+            
+            ++idx;
+        }
+        
+        string result = "/"; 
+        string sep = "";
+        for (int i = 0; i < (int)p.size(); ++i)
+        {
+            result += sep + p[i]; 
+            sep = "/";
+        }
+        
+        return result;
+    }
+    
+    void test()
+    {
+        string path = "/..";
+        string new_path = simplifyPath(path); 
+        cout << new_path << std::endl;
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+
+
 
 int main(int argc, char **argv)
 {
@@ -2342,7 +2585,11 @@ int main(int argc, char **argv)
     // c_solution<GrayCode>::run_test();
     // c_solution<ScrambleString>::run_test();
 
-    c_solution<RemoveDuplicatesSortedArray>::run_test();
+    // c_solution<RemoveDuplicatesSortedArray>::run_test();
+    
+    // c_solution<RemoveDuplicatesSortedArrayII>::run_test();
+    
+    c_solution<SimplifyPath>::run_test(); 
 
 
 	return 0;
