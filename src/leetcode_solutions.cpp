@@ -2891,19 +2891,43 @@ public:
 class UniquePathsII : public c_solution<UniquePaths>
 {
     /**
-     * DFS will TLE on large judge!
+     * DFS will TLE on large judge! 
+     * DP
      */
 public: 
     int uniquePathsWithObstacles(vector<vector<int> > &obstacleGrid)
     {
-        int paths = 0; 
+        int rows = obstacleGrid.size();
+        int cols = obstacleGrid[0].size();
         
-        if (obstacleGrid.size() == 0)
-            return 0; 
+        vector<int> pre_dp(cols, 0);
+        vector<int> dp(cols, 0);
+        
+        // First row 
+        pre_dp[0] = 1 - obstacleGrid[0][0];
+        for (int i = 1; i < cols; ++i)
+            pre_dp[i] = pre_dp[i-1] & (1 - obstacleGrid[0][i]);
 
-        dfs(obstacleGrid, 0, 0, paths); 
-        
-        return paths;
+        for (int i = 1; i < rows; ++i)
+        {
+            for (int j = 0; j < cols; ++j)
+            {
+                if (obstacleGrid[i][j] == 1)
+                {
+                    dp[j] = 0; 
+                    continue; 
+                }
+                
+                // From cell above
+                dp[j] = pre_dp[j]; 
+
+                // From cell left
+                if (j > 0)
+                    dp[j] += dp[j-1]; 
+            }
+            pre_dp.swap(dp);
+        }
+        return pre_dp[cols-1];
     }
     
     void dfs(vector<vector<int> >& grid, int row, int col, int& paths)
