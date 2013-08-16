@@ -2950,8 +2950,143 @@ public:
 }; 
 
 
+//////////////////////////////////////////////////////////////////////////
 
 
+class RotateList : public c_solution<RotateList>
+{
+    /*
+     * Incorrect Result 
+     */ 
+    
+    struct ListNode {
+        int val;
+        ListNode *next;
+        ListNode(int x) : val(x), next(NULL) {}
+    };
+    
+public:
+    ListNode *rotateRight(ListNode *head, int k)
+    {        
+        if (!head || k == 0)
+            return head;
+
+        ListNode *fast = head; 
+        ListNode *slow = head; 
+        ListNode *new_tail = NULL;
+
+        for (int i = 0; i < k && fast->next; ++i)
+            fast = fast->next; 
+        
+        while (fast->next)
+        {
+            fast = fast->next;
+            new_tail = slow;
+            slow = slow->next;
+        }
+        
+        if (fast == head)
+            return head;
+        
+        fast->next = head; 
+        new_tail = NULL;
+        head = slow; 
+        
+        return head;
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class PermutationSequence : public c_solution<PermutationSequence>
+{
+    /*
+     * Recursion TLE on large judge
+     */
+public:
+    string getPermutation(int n, int k) 
+    {
+        if (n == 0)
+            return "0";
+        string solution, res; 
+        vector<int> visited(n, 0); 
+        int count = 0; 
+        permute_helper(n, k, 0, count, solution, res, visited);
+        
+        return res; 
+    }
+    
+    void permute_helper(int n, int k, int step, int& count, string& solution, string& res, vector<int>& visited)
+    {
+        if (step == n)
+        {
+            ++count;
+            if (count == k)
+                res.assign(solution);
+            return; 
+        }
+        
+        for (int i = 1; i <= n; ++i)
+        {
+            if (visited[i-1] == 0)
+            {
+                visited[i-1] = 1; 
+                solution.push_back(i+'0'); 
+                permute_helper(n, k, step+1, count, solution, res, visited); 
+                visited[i-1] = 0; 
+                
+                if (solution.size() > 0)
+                    solution.resize(solution.size()-1);
+            }
+        }
+    }
+}; 
+
+//////////////////////////////////////////////////////////////////////////
+
+class SpiralMatrixII : public c_solution<SpiralMatrixII>
+{
+    /*
+     * AC
+     */ 
+
+public:
+    vector<vector<int> > generateMatrix(int n)
+    {
+        vector<vector<int> > mat(n, vector<int>(n, 0)); 
+        
+        int val = 1;
+        int max_layer = (n % 2 == 0) ? n / 2 : n / 2 + 1; 
+        for (int layer = 0; layer < max_layer; ++layer)
+        {
+            int first = layer;  
+            int last = n - 1 - first; 
+            
+            if (first == last)
+            {
+                mat[first][first] = val++;
+                continue; 
+            }
+            
+            for (int edge = 0; edge < 4; ++edge)
+            {
+                for (int i = first; i < last; ++i)
+                {
+                    int offset = i - first;
+                    if (edge == 0)      // top
+                        mat[first][i] = val++;
+                    if (edge == 1)      // right
+                        mat[i][last] = val++; 
+                    if (edge == 2)      // bottom
+                        mat[last][last-offset] = val++; 
+                    if (edge == 3)      // left
+                        mat[last-offset][first] = val++;
+                }
+            }
+        }
+        return mat; 
+    }
+};
 
 
 int main(int argc, char **argv)
