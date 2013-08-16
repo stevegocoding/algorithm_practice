@@ -2853,6 +2853,81 @@ public:
 };
 
 
+//////////////////////////////////////////////////////////////////////////
+
+class UniquePaths : public c_solution<UniquePaths>
+{
+    /*
+     * AC
+     */
+public:
+    int uniquePaths(int m, int n)
+    {
+        /*
+         * dp(i, j) represents number of unique paths from (0, 0) to (i, j)
+         * dp(i, j) = dp(i-1, j) + dp(i, j-1)
+         */
+        vector<vector<int> > dp(m, vector<int>(n, 0));
+        
+        for (int i = 0; i < m; ++i)
+            dp[i][0] = 1; 
+        for (int j = 0; j < n; ++j)
+            dp[0][j] = 1; 
+        
+        for (int i = 1; i < m; ++i)
+        {
+            for (int j = 1; j < n; ++j)
+            {
+                dp[i][j] = dp[i-1][j] + dp[i][j-1];
+            }
+        }
+        
+        return dp[m-1][n-1];
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class UniquePathsII : public c_solution<UniquePaths>
+{
+    /**
+     * DFS will TLE on large judge!
+     */
+public: 
+    int uniquePathsWithObstacles(vector<vector<int> > &obstacleGrid)
+    {
+        int paths = 0; 
+        
+        if (obstacleGrid.size() == 0)
+            return 0; 
+
+        dfs(obstacleGrid, 0, 0, paths); 
+        
+        return paths;
+    }
+    
+    void dfs(vector<vector<int> >& grid, int row, int col, int& paths)
+    {
+        if (row == (int)grid.size()-1 && col == (int)grid[0].size()-1)
+        {
+            if (grid[row][col] != 1)
+                ++paths;
+            return;
+        }
+        
+        if (grid[row][col] == 1)
+            return; 
+        
+        if (row != grid.size()-1)
+            dfs(grid, row+1, col, paths);
+        if (col != grid[0].size()-1)
+            dfs(grid, row, col+1, paths);
+    }
+}; 
+
+
+
+
 
 
 int main(int argc, char **argv)
