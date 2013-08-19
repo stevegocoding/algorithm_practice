@@ -3088,6 +3088,330 @@ public:
     }
 };
 
+//////////////////////////////////////////////////////////////////////////
+
+class LengthOfLastWord : public c_solution<LengthOfLastWord>
+{
+public:
+    int lengthOfLastWord(const char *s)
+    {
+        int r = 0;
+        while(*s) {
+            if(*(s++) != ' ')
+                ++r;
+            else if(*s && *s != ' ')
+                r = 0;
+        }
+        return r;
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class InsertInterval : public c_solution<InsertInterval>
+{
+    struct Interval {
+        int start;
+        int end;
+        Interval() : start(0), end(0) {}
+        Interval(int s, int e) : start(s), end(e) {}
+    };
+
+public:
+    vector<Interval> insert(vector<Interval> &intervals, Interval newInterval)
+    {
+        vector<Interval> result;
+        int i = 0; 
+        int n = (int)intervals.size();
+        
+        while (i < n && newInterval.start > intervals[i].end)
+            result.push_back(intervals[i++]);
+        
+        while (i < n && newInterval.end >= intervals[i].start)
+        {
+            newInterval.start = min(newInterval.start, intervals[i].start); 
+            newInterval.end = max(newInterval.end, intervals[i].end);
+            ++i;
+        }
+        result.push_back(newInterval);
+        
+        while (i < n)
+            result.push_back(intervals[i++]);
+        
+        return result;
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class MergeInterval : public c_solution<MergeInterval>
+{
+    struct Interval {
+        int start;
+        int end;
+        Interval() : start(0), end(0) {}
+        Interval(int s, int e) : start(s), end(e) {}
+    };
+
+public: 
+    vector<Interval> merge(vector<Interval> &intervals)
+    {
+        int i = 0;
+        
+        vector<Interval> result;
+        bool merged = false;
+        while (i < (int)intervals.size()-1)
+        {
+            if (intervals[i].end <= intervals[i+1].start)
+            {
+                Interval in;
+                in.start = min(intervals[i].start, intervals[i+1].start); 
+                in.end = max(intervals[i].end, intervals[i+1].end);
+                result.push_back(in);
+                merged = true;
+            }
+            else 
+            {
+                result.push_back(intervals[i]);
+                merged = false;
+            }
+            
+            ++i;
+        }
+        
+        if (!merged)
+            result.push_back(intervals[i]);
+        
+        return result;
+    }
+};
+
+////////////////////////////////////////////////////////////////////////// 
+
+class JumpGame : public c_solution<JumpGame>
+{
+public:
+   bool canJump(int A[], int n) 
+   { 
+       int idx = 0;
+       for (;idx < n;)
+       {
+           if (A[idx] == 0)
+           { 
+               if (idx == n-1)
+                   return true; 
+               else
+                   return false; 
+           } 
+           idx += A[idx];
+       }
+       return true;
+   }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class SpiralMatrix : public c_solution<SpiralMatrix>
+{
+public:
+    vector<int> spiralOrder(vector<vector<int> > &matrix)
+    {
+        vector<int> result;
+        if (matrix.empty()) return result;
+        size_t beginX = 0, endX = matrix[0].size() - 1;
+        size_t beginY = 0, endY = matrix.size() - 1;
+        while (true) {
+            // From left to right
+            for (size_t i = beginX; i <= endX; ++i)
+                result.push_back(matrix[beginY][i]);
+            if (++beginY > endY) break;
+            // From top down
+            for (size_t i = beginY; i <= endY; ++i)
+                result.push_back(matrix[i][endX]);
+            if (beginX > --endX) break;
+            // From right to left
+            for (size_t i = endX; i >= beginX; --i)
+                result.push_back(matrix[endY][i]);
+            if (beginY > --endY) break;
+            // From bottom up
+            for (size_t i = endY; i >= beginY; --i)
+                result.push_back(matrix[i][beginX]);
+            if (++beginX > endX) break;
+        }
+        return result;
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class MaximumSubarray : public c_solution<MaximumSubarray>
+{
+public:
+    int maxSubArray(int A[], int n)
+    {
+        vector<int> dp(n, 0);
+        dp[0] = A[0];
+        int result = -9999;
+
+        for (int i = 1; i < n; ++i)
+        {
+            dp[i] = max(dp[i-1] + A[i], A[i]); 
+            result = max(result, dp[i]);
+        }
+        
+        return result;
+    }
+
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class NQueens : public c_solution<NQueens>
+{
+public:
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class NQueensII : public c_solution<NQueensII>
+{
+public:
+    
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class Pow : public c_solution<Pow>
+{
+public:
+    double pow(double x, int n)
+    {
+        if (n == 0)
+            return 1.0;
+        
+        double pow_half = pow(x, n/2);
+        if (n % 2 == 0)
+            return pow_half * pow_half;
+        else if (n > 0)
+            return pow_half * pow_half * x; 
+        else 
+            return pow_half * pow_half / x;
+    }
+    
+    /*
+    double pow2(double x, int n)
+    {        
+        unsigned m = abs((double)n);
+        double ret = 1;
+        for ( ; m; x *= x, m >>= 1) {
+            if (m & 1) {
+                ret *= x;
+            }
+        }
+        return (n < 0) ? (1.0 / ret) : (ret);
+    }
+    */
+}; 
+
+//////////////////////////////////////////////////////////////////////////
+
+class Anagrams : public c_solution<Anagrams>
+{
+public:
+    vector<string> anagrams(vector<string> &strs)
+    {    
+        vector<string> cc;
+        map<string, vector<string> > dict;
+        vector<string>::iterator st;
+        for(st = strs.begin(); st != strs.end(); st++) {
+            string key = *st;
+            sort(key.begin(), key.end());
+            dict[key].push_back(*st);
+        }
+        map<string, vector<string> >::iterator it;
+        for(it = dict.begin(); it != dict.end(); it++) {
+            if(it->second.size() > 1)
+                for(st = it->second.begin(); st != it->second.end(); st++)
+                    cc.push_back(*st);
+        }
+        return cc;
+        
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class PermutationsII : public c_solution<PermutationsII>
+{
+public:
+    vector<vector<int> > permuteUnique(vector<int> &num)
+    {
+        vector<bool> used(num.size(), false);
+        vector<int> path;
+        vector<vector<int> > ret; 
+
+        sort(num.begin(), num.end());
+        helper(num, used, path, ret);
+        
+        return ret;
+    }
+    
+    void helper(vector<int>& num, vector<bool>& used, vector<int>& path, vector<vector<int> >& ret)
+    {
+        if (num.size() == path.size())
+        {
+            ret.push_back(path);
+            return; 
+        }
+        
+        for (int i = 0; i < num.size(); ++i)
+        {
+            if (used[i] || (i != 0 && num[i] == num[i-1] && used[i-1]))
+                continue;
+            used[i] = true; 
+            path.push_back(num[i]);
+            helper(num, used, path, ret); 
+            used[i] = false;
+            path.pop_back();
+        }
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class JumpGameII : public c_solution<JumpGameII>
+{
+public:
+    int jump(int A[], int n) 
+    {
+        int min_step = 0; 
+        int low_idx = 0; 
+        int high_idx = 0;
+
+        if (n == 1)
+            return 0; 
+
+        while (low_idx <= high_idx)
+        {
+            ++min_step; 
+            int last_idx = high_idx; 
+            for (int i = low_idx; i <= last_idx; ++i)
+            {
+                int possible_idx = i + A[i]; 
+                if (possible_idx >= n-1)
+                    return min_step; 
+                if (possible_idx > high_idx)
+                    high_idx = possible_idx; 
+            }
+            low_idx = last_idx + 1; 
+        }
+        
+        return 0;
+    }
+}; 
+
+
+
 
 int main(int argc, char **argv)
 {
