@@ -3410,6 +3410,234 @@ public:
     }
 }; 
 
+//////////////////////////////////////////////////////////////////////////
+
+class MultiplyStrings : public c_solution<MultiplyStrings>
+{
+public:
+    string multiply(string num1, string num2) 
+    {
+        int len1 = (int)num1.size(); 
+        int len2 = (int)num2.size();
+
+        if (len1 <= 0 || len2 <= 0)
+            return "";
+        
+        string result = ""; 
+        vector<int> n(len1 + len2, 0); 
+        
+        for (int i = 0; i < len1; ++i)
+        {
+            int n1 = num1[len1-i-1] - '0';
+            int carry = 0; 
+            for (int j = 0; j < len2; ++j)
+            {
+                int n2 = num2[len2-j-i] - '0';
+                carry = n1 * n2 + carry + n[i+j];
+                n[i+j] = carry % 10; 
+                carry = carry / 10; 
+            }
+            n[i+len2] = carry;
+        }
+        
+        int i = len1 + len2 - 1; 
+        while (i > 0 && n[i] == 0)
+            --i;
+        while (i >= 0)
+        {
+            result.append(1, n[i] + '0'); 
+            --i;
+        }
+        
+        return result;
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class FirstMissingPositive : public c_solution<FirstMissingPositive>
+{
+    /*
+     * [3, 4, -1, 1]
+     */ 
+public:
+    int firstMissingPositive(int A[], int n)
+    {
+        for (int i=0; i<n; ++i)
+        {
+            if (A[i] > 0 && A[i] < n)
+            {
+                if (A[i]-1 != i && A[A[i]-1] != A[i])
+                {
+                    int temp = A[A[i]-1];
+                    A[A[i]-1] = A[i];
+                    A[i] = temp;
+                    --i;
+                }
+            }
+        }
+
+        for (int j=0; j<n; ++j)
+            if (A[j]-1 != j)
+                return j+1;
+
+        return n+1; 
+    }
+};
+
+
+//////////////////////////////////////////////////////////////////////////
+
+class CombinationSum : public c_solution<CombinationSum>
+{
+public: 
+    vector<vector<int> > combinationSum(vector<int> &candidates, int target)
+    {
+        vector<int> path;
+        vector<vector<int> > results;
+        
+        sort(candidates.begin(), candidates.end());
+        helper(candidates, 0, target, path, results); 
+        return results;
+    }
+    
+    void helper(vector<int>& candidates, int start, int target, vector<int>& path, vector<vector<int> >& results)
+    {
+        if (start > candidates.size() || target < 0)
+            return;
+        
+        if (target == 0)
+        {
+            results.push_back(path);
+            return;
+        }
+        else
+        {
+            for (int i = start; i < candidates.size(); ++i)
+            {
+                if (candidates[i] > target)
+                    continue; 
+                path.push_back(candidates[i]); 
+                helper(candidates, i, target-candidates[i], path, results);
+                path.pop_back(); 
+            }
+        }
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class CombinationSumII : public c_solution<CombinationSumII>
+{
+public:
+    vector<vector<int> > combinationSum2(vector<int> &num, int target)
+    {
+        vector<int> path;
+        vector<vector<int> > results;
+        
+        sort(num.begin(), num.end());
+        helper(num, 0, target, path, results); 
+        return results;
+    }
+    
+    void helper(vector<int>& candidates, int start, int target, vector<int>& path, vector<vector<int> >& results)
+    {
+        if (start > candidates.size() || target < 0)
+            return; 
+
+        if (target == 0)
+        {
+            results.push_back(path);
+            return;
+        }
+        
+        for (int i = start; i < candidates.size(); ++i)
+        {
+            if (i > start && candidates[i] == candidates[i-1])
+                continue;
+            path.push_back(candidates[i]);
+            if (i < candidates.size()-1)
+                helper(candidates, i+1, target-candidates[i], path, results);
+            path.pop_back();
+        }
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class SearchInsert : public c_solution<SearchInsert>
+{
+public:
+    int searchInsert(int A[], int n, int target)
+    {
+        int high = n-1; 
+        int low = 0; 
+        int mid = 0; 
+        while (low <= high)
+        {
+            mid = (low + high) / 2;
+            if (A[mid] == target)
+                return mid;
+            else if (A[mid] < target)
+                low = mid + 1; 
+            else 
+                high = mid - 1; 
+        }
+        
+        if (A[mid] < target)
+            return mid+1; 
+        else 
+            return mid;
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class SearchRange : public c_solution<SearchRange>
+{
+public:
+    vector<int> searchRange(int A[], int n, int target)
+    {
+        vector<int> range(2, -1); 
+        int low = 0;
+        int high = n; 
+        int mid = 0;
+        
+        // Search for lower range
+        while (low < high)
+        {
+            mid = (low + high) / 2; 
+            if (A[mid] < target)
+                low = mid + 1;
+            else 
+                high = mid;
+        }
+        
+        // If the target is not found, return range(-1, -1)
+        if (A[low] != target)
+            return range;
+        range[0] = low;
+        
+        // Search for upper range
+        high = n;
+        while (low < high)
+        {
+            mid = (low + high) / 2; 
+            if (A[mid] > target)
+                high = mid; 
+            else 
+                low = mid + 1;
+        }
+        
+        range[1] = high-1; 
+
+        return range;
+    }
+};
+
+
+
+
 
 
 
