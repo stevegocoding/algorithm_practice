@@ -3635,9 +3635,105 @@ public:
     }
 };
 
+//////////////////////////////////////////////////////////////////////////
 
+class LongestValidParentheses : public c_solution<LongestValidParentheses>
+{
+public: 
+    int longestValidParentheses(string s)
+    {
+        stack<int> stack;
+        int last = -1;
+        int max_len = 0;
+        
+        for (int i = 0; i < (int)s.length(); ++i)
+        {
+            if (s[i] == '(')
+            {
+                stack.push(i);
+            }
+            else
+            {
+                if (stack.empty())
+                {
+                    last = i; 
+                }
+                else
+                {
+                    stack.pop();
+                    if (stack.empty())
+                        max_len = max(max_len, i-last);
+                    else 
+                        max_len = max(max_len, i-stack.top());
+                }
+            }
+        }
+        return max_len;
+    }
+}; 
 
+//////////////////////////////////////////////////////////////////////////
 
+/*
+ * Substring with Concatenation of All Words
+ */
+class FindSubstring : public c_solution<FindSubstring>
+{
+public:
+    /*
+    vector<int> findSubstring(string S, vector<string> &L)
+    {
+        
+        
+    }
+    */
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+/*
+ * Divide Two Integers
+ */
+class Divide : public c_solution<Divide>
+{
+public:
+    int divide(int dividend, int divisor) {
+        long long a = std::fabs((double)dividend);;
+        long long b = std::fabs((double)divisor);
+
+        long long ret = 0;
+        while (a >= b) {
+            long long c = b;
+            for (int i = 0; a >= c; ++i, c <<= 1) {
+                a -= c;
+                ret += 1 << i;
+            }
+        }
+
+        return ((dividend^divisor)>>31) ? (-ret) : (ret);
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////
+
+class RemoveElement : public c_solution<RemoveElement>
+{
+public:
+    
+    int removeElement(int A[], int n, int elem)
+    {
+        for (int i = 0; i < n;)
+        {
+            if (A[i] == elem)
+            {
+                A[i] = A[--n];
+            }
+            else
+                ++i;
+        }
+        return n; 
+    }
+};
 
 
 
