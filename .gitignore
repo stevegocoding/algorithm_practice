@@ -1,7 +1,8 @@
 
 build/
 obj/
-
+src/.idea/
+src/py_impl
 
 # LaTeX temp files 
 *.aux
