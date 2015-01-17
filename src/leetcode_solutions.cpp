@@ -1665,7 +1665,7 @@ public:
 		
 		for (int i = pos; i < (int)s.size(); ++i)
 		{
-			path.push_back(s[pos]);
+			path.push_back(s[i]);
 			subsets_helper(s, i+1, path, results);
 			path.pop_back(); 
 		}
